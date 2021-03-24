@@ -1,0 +1,76 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <DB2CodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </DB2CodeStyleSettings>
+    <DerbyCodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </DerbyCodeStyleSettings>
+    <H2CodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </H2CodeStyleSettings>
+    <HSQLCodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </HSQLCodeStyleSettings>
+    <MSSQLCodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </MSSQLCodeStyleSettings>
+    <MySQLCodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="KEYWORD_CASE" value="2" />
+      <option name="TYPE_CASE" value="2" />
+      <option name="CUSTOM_TYPE_CASE" value="2" />
+    </MySQLCodeStyleSettings>
+    <OracleCodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </OracleCodeStyleSettings>
+    <PostgresCodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </PostgresCodeStyleSettings>
+    <SQLiteCodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </SQLiteCodeStyleSettings>
+    <SqlCodeStyleSettings version="5">
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </SqlCodeStyleSettings>
+    <SybaseCodeStyleSettings version="5">
+      <option name="USE_GENERAL_STYLE" value="false" />
+      <option name="SUBQUERY_CONTENT" value="2" />
+      <option name="SUBQUERY_CLOSING" value="2" />
+    </SybaseCodeStyleSettings>
+    <codeStyleSettings language="CSS">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="JavaScript">
+      <indentOptions>
+        <option name="INDENT_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
+        <option name="TAB_SIZE" value="2" />
+      </indentOptions>
+    </codeStyleSettings>
+    <codeStyleSettings language="Python">
+      <option name="RIGHT_MARGIN" value="100" />
+    </codeStyleSettings>
+  </code_scheme>
+</component>

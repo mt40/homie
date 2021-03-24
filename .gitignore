@@ -1,0 +1,10 @@
+# generated files
+*.pyc
+__pycache__/
+db.sqlite3
+
+# mac os
+.DS_Store
+
+# IDE
+backend/backend.iml
