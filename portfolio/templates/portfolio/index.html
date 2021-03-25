@@ -1,4 +1,5 @@
 {% load static %}
+{% load pwa %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,9 +7,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <link rel="manifest" href="{% static 'portfolio/manifest.json'%}">
+    {% progressive_web_app_meta %}
 
-{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">#}
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
@@ -20,23 +20,25 @@
 <ion-app>
   <ion-tabs>
     <ion-tab tab="home">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Home</ion-title>
-        </ion-toolbar>
-      </ion-header>
+      {% include 'portfolio/header.html' with title='Home' %}
 
       <ion-content class="ion-padding">
+        {% include 'portfolio/fab.html' %}
+
         <h1>Home Content</h1>
+
+        <ion-button shape="round" color="primary">Round Button</ion-button>
+        <ion-button shape="round" color="success">Round Button</ion-button>
+        <ion-button shape="round" color="light">Round Button</ion-button>
+        <ion-button shape="round" color="dark">Round Button</ion-button>
+
+        {% include 'portfolio/list.html' %}
+
       </ion-content>
     </ion-tab>
 
     <ion-tab tab="settings">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Setting</ion-title>
-        </ion-toolbar>
-      </ion-header>
+      {% include 'portfolio/header.html' with title='Settings' %}
 
       <ion-content class="ion-padding">
         <h1>Setting Content</h1>
@@ -57,7 +59,6 @@
 </ion-app>
 
 
-<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@4.7.4/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://cdn.jsdelivr.net/npm/ionicons@4.7.4/dist/ionicons/ionicons.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.1/dist/ionicons/ionicons.esm.js"></script>
 </body>
 </html>
