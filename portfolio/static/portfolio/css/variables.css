@@ -1,4 +1,9 @@
 :root {
   /* Set the font family of the entire app */
   --ion-font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
+  --ion-safe-area-bottom: 20px;
+}
+
+ion-content {
+  --offset-bottom: 100px;
 }
