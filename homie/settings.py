@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +25,13 @@ SECRET_KEY = '4hjm5d57_k=vj-109sajy#^3p!ckb7c9+6s05f36=(f=@cznv7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "192.168.68.104",
+    "homie-mt-2021.et.r.appspot.com",
+    "homie-mt-2021.appspot.com",
+]
 
 
 # Application definition
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pwa',
     'portfolio',
 ]
 
@@ -119,3 +126,33 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+PWA_APP_NAME = 'Homie'
+PWA_APP_DESCRIPTION = "My trusty digital Homie"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/portfolio/android-chrome-192x192.png',
+        'sizes': '192x192'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': '/static/portfolio/apple-touch-icon.png',
+        'sizes': '180x180'
+    }
+]
+# PWA_APP_SPLASH_SCREEN = [
+#     {
+#         'src': '/static/images/icons/splash-640x1136.png',
+#         'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+#     }
+# ]
+PWA_APP_LANG = 'en-US'

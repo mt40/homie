@@ -1,26 +1,64 @@
+{% load static %}
+{% load pwa %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    {% progressive_web_app_meta %}
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"/>
 </head>
 <body>
-<section class="section">
-    <div class="container">
-        <h1 class="title">
-            Hello World
-        </h1>
-        <p class="subtitle">
-            My first website with <strong>Bulma</strong>!
-        </p>
-    </div>
 
-    <div class="table-container">
-        {% include 'portfolio/table.html' %}
-    </div>
-</section>
+<ion-app>
+  <ion-tabs>
+    <ion-tab tab="home">
+      {% include 'portfolio/header.html' with title='Home' %}
+
+      <ion-content class="ion-padding">
+        {% include 'portfolio/fab.html' %}
+
+        <h1>Home Content</h1>
+
+        <ion-button shape="round" color="primary">Round Button</ion-button>
+        <ion-button shape="round" color="success">Round Button</ion-button>
+        <ion-button shape="round" color="light">Round Button</ion-button>
+        <ion-button shape="round" color="dark">Round Button</ion-button>
+
+        {% include 'portfolio/list.html' %}
+
+      </ion-content>
+    </ion-tab>
+
+    <ion-tab tab="settings">
+      {% include 'portfolio/header.html' with title='Settings' %}
+
+      <ion-content class="ion-padding">
+        <h1>Setting Content</h1>
+      </ion-content>
+    </ion-tab>
+
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="home">
+        <ion-label>Home</ion-label>
+        <ion-icon name="home"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="settings">
+        <ion-label>Settings</ion-label>
+        <ion-icon name="settings"></ion-icon>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-app>
+
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.1/dist/ionicons/ionicons.esm.js"></script>
 </body>
 </html>
