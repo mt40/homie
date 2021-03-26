@@ -1,0 +1,17 @@
+<ion-tab tab="home">
+    {% include 'portfolio/header.html' with title='Home' %}
+
+    <ion-content class="ion-padding">
+        {% include 'portfolio/fab.html' %}
+
+        <h1>Home Content</h1>
+
+        <ion-button shape="round" color="primary">Round Button</ion-button>
+        <ion-button shape="round" color="success">Round Button</ion-button>
+        <ion-button shape="round" color="light">Round Button</ion-button>
+        <ion-button shape="round" color="dark">Round Button</ion-button>
+
+        {% include 'portfolio/list.html' %}
+
+    </ion-content>
+</ion-tab>

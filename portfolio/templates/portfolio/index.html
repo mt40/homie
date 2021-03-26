@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Homie</title>
 
     {% progressive_web_app_meta %}
 
@@ -18,44 +18,12 @@
 <body>
 
 <ion-app>
-  <ion-tabs>
-    <ion-tab tab="home">
-      {% include 'portfolio/header.html' with title='Home' %}
+    <ion-tabs>
+        {% include 'portfolio/tab_home.html' %}
+        {% include 'portfolio/tab_settings.html' %}
 
-      <ion-content class="ion-padding">
-        {% include 'portfolio/fab.html' %}
-
-        <h1>Home Content</h1>
-
-        <ion-button shape="round" color="primary">Round Button</ion-button>
-        <ion-button shape="round" color="success">Round Button</ion-button>
-        <ion-button shape="round" color="light">Round Button</ion-button>
-        <ion-button shape="round" color="dark">Round Button</ion-button>
-
-        {% include 'portfolio/list.html' %}
-
-      </ion-content>
-    </ion-tab>
-
-    <ion-tab tab="settings">
-      {% include 'portfolio/header.html' with title='Settings' %}
-
-      <ion-content class="ion-padding">
-        <h1>Setting Content</h1>
-      </ion-content>
-    </ion-tab>
-
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="home">
-        <ion-label>Home</ion-label>
-        <ion-icon name="home"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="settings">
-        <ion-label>Settings</ion-label>
-        <ion-icon name="settings"></ion-icon>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+        {% include 'portfolio/tabbar_bottom.html' %}
+    </ion-tabs>
 </ion-app>
 
 
