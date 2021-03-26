@@ -1,0 +1,30 @@
+name: Deploy To Test
+
+on:
+  push:
+    branches: [ master, deploy_ci ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  gcp_app_engine_deploy_job:
+    runs-on: ubuntu-18.04
+    name: Deploy to GCP App Engine
+    steps:
+      - name: Initialize Google Cloud SDK
+        uses: zxyle/publish-gae-action@master
+        with:
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.PROJECT_ID }}
+          gae_config_path: ./app.yaml
+
+      - name: Publish app
+        run: |
+          # This client-secret.json is converted by GCP_SA_KEY.
+          gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
+          gcloud config set project ${{ secrets.PROJECT_ID }}
+          gcloud -q app deploy app.yaml --promote
+
+          # Suppose you need a cron task.
+          # gcloud -q app deploy cron.yaml
