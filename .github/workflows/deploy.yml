@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v2
       - id: check
         run: |
+          echo "Check env"
+          echo $TMP_SECRET
           echo $PROJECT_ID
           ls -alh
       - id: deploy
