@@ -13,12 +13,14 @@
 
     {% include 'portfolio/header_ionic.html' %}
     <link rel="stylesheet" href="{% static 'portfolio/css/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'portfolio/css/global.css' %}">
 </head>
 <body>
 
 <ion-app>
     <ion-tabs>
-        {% include 'portfolio/tab_home.html' %}
+        {% include 'portfolio/tab_dashboard.html' %}
+        {% include 'portfolio/tab_txn.html' %}
         {% include 'portfolio/tab_settings.html' %}
 
         {% include 'portfolio/tabbar_bottom.html' %}

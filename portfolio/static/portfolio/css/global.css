@@ -1,0 +1,11 @@
+.ios ion-toolbar ion-title {
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  text-align: left;
+}
+
+.toolbar-title {
+  text-overflow: unset;
+  white-space: unset;
+}
+
