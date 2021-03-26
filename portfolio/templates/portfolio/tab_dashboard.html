@@ -1,0 +1,17 @@
+{% load static %}
+
+<ion-tab tab="home">
+  <ion-content class="ion-padding" fullscreen="true">
+    {% include 'portfolio/fab.html' %}
+    {% include 'portfolio/toolbar.html' with title='Dashboard' %}
+
+    <canvas id="myChart1" class="dashboard-chart" height="100px" width="100%"></canvas>
+    <canvas id="myChart2" class="dashboard-chart" height="100px" width="100%"></canvas>
+    <canvas id="myChart3" class="dashboard-chart" height="100px" width="100%"></canvas>
+
+    <script type="text/javascript">
+      var line_chart_json_url = '{% url "line_chart_json" %}';
+    </script>
+    <script type="text/javascript" src="{% static 'portfolio/js/dashboard.js' %}"></script>
+  </ion-content>
+</ion-tab>

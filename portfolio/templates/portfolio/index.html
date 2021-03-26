@@ -4,61 +4,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>Homie</title>
 
-    {% progressive_web_app_meta %}
+  {% progressive_web_app_meta %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
-    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"/>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+          integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+  {% include 'portfolio/header_ionic.html' %}
+  <link rel="stylesheet" href="{% static 'portfolio/css/variables.css' %}">
+  <link rel="stylesheet" href="{% static 'portfolio/css/global.css' %}">
 </head>
 <body>
 
 <ion-app>
   <ion-tabs>
-    <ion-tab tab="home">
-      {% include 'portfolio/header.html' with title='Home' %}
+    {% include 'portfolio/tab_dashboard.html' %}
+    {% include 'portfolio/tab_txn.html' %}
+    {% include 'portfolio/tab_settings.html' %}
 
-      <ion-content class="ion-padding">
-        {% include 'portfolio/fab.html' %}
-
-        <h1>Home Content</h1>
-
-        <ion-button shape="round" color="primary">Round Button</ion-button>
-        <ion-button shape="round" color="success">Round Button</ion-button>
-        <ion-button shape="round" color="light">Round Button</ion-button>
-        <ion-button shape="round" color="dark">Round Button</ion-button>
-
-        {% include 'portfolio/list.html' %}
-
-      </ion-content>
-    </ion-tab>
-
-    <ion-tab tab="settings">
-      {% include 'portfolio/header.html' with title='Settings' %}
-
-      <ion-content class="ion-padding">
-        <h1>Setting Content</h1>
-      </ion-content>
-    </ion-tab>
-
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="home">
-        <ion-label>Home</ion-label>
-        <ion-icon name="home"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="settings">
-        <ion-label>Settings</ion-label>
-        <ion-icon name="settings"></ion-icon>
-      </ion-tab-button>
-    </ion-tab-bar>
+    {% include 'portfolio/tabbar_bottom.html' %}
   </ion-tabs>
 </ion-app>
 
 
-<script type="module" src="https://cdn.jsdelivr.net/npm/ionicons@5.5.1/dist/ionicons/ionicons.esm.js"></script>
+<script type="module"
+        src="https://cdn.jsdelivr.net/npm/ionicons@5.5.1/dist/ionicons/ionicons.esm.js"></script>
 </body>
 </html>

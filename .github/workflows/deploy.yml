@@ -1,0 +1,26 @@
+name: Deploy To Test
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy_to_app_engine:
+    runs-on: ubuntu-18.04
+    name: Deploy to GCP App Engine
+    environment: test
+    steps:
+      - id: checkout
+        uses: actions/checkout@v2
+      - id: check
+        shell: bash
+        run: |
+          ls -alh
+      - id: deploy
+        uses: google-github-actions/deploy-appengine@main
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          deliverables: app.yaml
+      - id: test_deploy
+        run: curl "${{ steps.deploy.outputs.url }}"
