@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-18.04
     name: Deploy to GCP App Engine
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Check
         run: |
           ls -alh .
