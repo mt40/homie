@@ -8,6 +8,7 @@ jobs:
   deploy_to_app_engine:
     runs-on: ubuntu-18.04
     name: Deploy to GCP App Engine
+    environment: test
     steps:
       - id: checkout
         uses: actions/checkout@v2
