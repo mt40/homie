@@ -1,6 +1,16 @@
 version: "3.3"
 
 services:
+  cloud_sql_proxy:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.20.2
+    command: /cloud_sql_proxy \
+      -instances=homie-mt-2021:asia-southeast1:homie-test=tcp:0.0.0.0:3306 \
+      -credential_file=/config
+    user: root
+    volumes:
+      - ./sa_key.json:/config
+    ports:
+      - "3306:3306"
   web:
     build: .
     command: python manage.py runserver 0:8080
@@ -8,3 +18,5 @@ services:
       - .:/code
     ports:
       - "8080:8080"
+    depends_on:
+      - cloud_sql_proxy
