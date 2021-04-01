@@ -22,5 +22,7 @@ jobs:
           project_id: ${{ secrets.PROJECT_ID }}
           credentials: ${{ secrets.GCP_SA_KEY }}
           deliverables: app.yaml
+      - id: migrate
+        run: python manage.py migrate
       - id: test_deploy
         run: curl "${{ steps.deploy.outputs.url }}"
