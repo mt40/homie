@@ -10,19 +10,27 @@ jobs:
     name: Deploy to GCP App Engine
     environment: test
     steps:
-      - id: checkout
+      - name: checkout
         uses: actions/checkout@v2
-      - id: check
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: check
         shell: bash
         run: |
           ls -alh
+          python --version
+          pip --version
+      - name: build
+        run: |
+          pip install -r requirements.txt
+          python manage.py collectstatic
       - id: deploy
+        name: deploy
         uses: google-github-actions/deploy-appengine@main
         with:
           project_id: ${{ secrets.PROJECT_ID }}
           credentials: ${{ secrets.GCP_SA_KEY }}
           deliverables: app.yaml
-      - id: migrate
-        run: python manage.py migrate
-      - id: test_deploy
+      - name: test_deploy
         run: curl "${{ steps.deploy.outputs.url }}"
