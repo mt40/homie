@@ -9,28 +9,49 @@ jobs:
     runs-on: ubuntu-18.04
     name: Deploy to GCP App Engine
     environment: test
+    env:
+      DJANGO_SETTINGS_MODULE: homie.settings.test
+      CLOUD_SQL_CONNECTION_NAME: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: '3.7'
-      - name: check
+      - name: System check
         shell: bash
         run: |
           ls -alh
           python --version
           pip --version
-      - name: build
+      - name: Build
         run: |
           pip install -r requirements.txt
           python manage.py collectstatic
       - id: deploy
-        name: deploy
+        name: Deploy
         uses: google-github-actions/deploy-appengine@main
         with:
           project_id: ${{ secrets.PROJECT_ID }}
           credentials: ${{ secrets.GCP_SA_KEY }}
           deliverables: app.yaml
-      - name: test_deploy
-        run: curl "${{ steps.deploy.outputs.url }}"
+      - name: Setup Cloud SQL Proxy
+        uses: mattes/gce-cloudsql-proxy-action@v1
+        with:
+          creds: ${{ secrets.GCP_SA_KEY_JSON }}
+          instance: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
+          proxy_version: 1.20.2
+      - name: Migrate DB
+        run: python manage.py migrate
+
+  test_deploy:
+    runs-on: ubuntu-18.04
+    name: Test Deploy
+    environment: test
+    needs: deploy_to_app_engine
+    steps:
+      - name: get_request
+        run: curl "${{ secrets.APP_URL }}"

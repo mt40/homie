@@ -9,7 +9,7 @@ print(f"base dir: {BASE_DIR}")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': f'/cloudsql/{os.environ["CLOUD_SQL_CONNECTION_NAME"]}',
+        'HOST': '127.0.0.1',
         'USER': os.environ['DB_USER'],
         'PASSWORD': os.environ['DB_PASSWORD'],
         'NAME': os.environ['DB_NAME'],
