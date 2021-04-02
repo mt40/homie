@@ -2,6 +2,14 @@ runtime: python37
 
 instance_class: F1
 
+# GCP requires that we must have a service named 'default' so we use this
+# as our test env
+service: default
+
+env_variables:
+  PROJECT_ID: "homie-mt-2021"
+  DJANGO_SETTINGS_MODULE: "homie.settings.test"
+
 handlers:
   # This configures Google App Engine to serve the files in the app's static
   # directory.

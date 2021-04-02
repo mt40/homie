@@ -10,11 +10,12 @@ jobs:
     name: Deploy to GCP App Engine
     environment: test
     env:
+      PROJECT_ID: ${{ secrets.PROJECT_ID }}
       DJANGO_SETTINGS_MODULE: homie.settings.test
       CLOUD_SQL_CONNECTION_NAME: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_NAME: ${{ secrets.DB_NAME }}
+      TEST_DB_USER: ${{ secrets.DB_USER }}
+      TEST_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TEST_DB_NAME: ${{ secrets.DB_NAME }}
       DEFAULT_ADMIN_USERNAME: ${{ secrets.DEFAULT_ADMIN_USERNAME }}
       DEFAULT_ADMIN_PASSWORD: ${{ secrets.DEFAULT_ADMIN_PASSWORD }}
     steps:

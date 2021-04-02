@@ -1,4 +1,5 @@
 from homie.settings.local import *
+from portfolio import secret_util
 
 """
 These settings is used by CI and App Engine Test. 
@@ -10,8 +11,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': '127.0.0.1',
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'NAME': os.environ['DB_NAME'],
+        'USER': secret_util.get_latest('TEST_DB_USER'),
+        'PASSWORD': secret_util.get_latest('TEST_DB_PASSWORD'),
+        'NAME': secret_util.get_latest('TEST_DB_NAME')
     }
 }

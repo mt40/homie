@@ -2,3 +2,4 @@ Django==3.1.7
 psycopg2-binary>=2.8
 django-pwa==1.0.10
 django-chartjs==2.2.1
+google-cloud-secret-manager==2.4.0
