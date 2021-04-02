@@ -10,7 +10,7 @@ print(f"base dir: {BASE_DIR}")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': '127.0.0.1',
+        'HOST': secret_util.get_latest('TEST_DB_HOST'),
         'USER': secret_util.get_latest('TEST_DB_USER'),
         'PASSWORD': secret_util.get_latest('TEST_DB_PASSWORD'),
         'NAME': secret_util.get_latest('TEST_DB_NAME')

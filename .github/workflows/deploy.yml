@@ -13,6 +13,7 @@ jobs:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
       DJANGO_SETTINGS_MODULE: homie.settings.test
       CLOUD_SQL_CONNECTION_NAME: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
+      TEST_DB_HOST: '127.0.0.1'
       TEST_DB_USER: ${{ secrets.DB_USER }}
       TEST_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       TEST_DB_NAME: ${{ secrets.DB_NAME }}

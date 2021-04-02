@@ -10,7 +10,7 @@ def get_latest(secret_id: str, prefer_env: bool = True) -> str:
         if secret_id in os.environ:
             return os.environ[secret_id]
         return get_latest(secret_id, prefer_env=False)
-    
+
     return _access_secret_version(PROJECT_ID, secret_id, "latest")
 
 
