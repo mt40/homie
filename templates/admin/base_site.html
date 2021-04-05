@@ -1,0 +1,16 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+
+  <link rel="stylesheet" href="{% static 'portfolio/css/variables.css' %}"/>
+  <link rel="stylesheet" href="{% static 'portfolio/css/color.css' %}"/>
+  <link rel="stylesheet" href="{% static 'portfolio/css/font.css' %}"/>
+
+  <!-- fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;1,500&family=Lexend:wght@400;700&display=swap"
+    rel="stylesheet">
+{% endblock %}
