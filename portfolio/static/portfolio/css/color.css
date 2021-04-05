@@ -6,7 +6,6 @@
 /*index page title*/
 #branding h1, #branding h1 a:link, #branding h1 a:visited {
   color: var(--accent-color-yellow);
-  font-weight: bold;
 }
 
 .module caption, .module h2 {
@@ -16,7 +15,6 @@
 /*module title*/
 .module caption a.section:link, a.section:visited {
   color: black;
-  font-weight: bold;
 }
 
 /*filter group title*/
@@ -28,12 +26,10 @@
 div.breadcrumbs {
   background-color: var(--accent-color-brown);
   color: black;
-  font-weight: bold;
 }
 
 div.breadcrumbs a {
   color: black;
-  font-weight: normal;
 }
 
 a:link, a:visited {

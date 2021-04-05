@@ -1,0 +1,34 @@
+@media (max-width: 1024px) {
+    /*page header title*/
+    #branding h1 {
+        font-size: 40px !important;
+    }
+}
+
+/*index page title*/
+#branding h1, #branding h1 a:link, #branding h1 a:visited {
+    font-family: 'Crimson Pro', serif;
+    font-weight: bold;
+}
+
+/*module title*/
+.module caption a.section:link, a.section:visited {
+    font-weight: bold;
+}
+
+/*filter group title*/
+.module h2, .module caption, .inline-group h2 {
+    font-weight: bold;
+}
+
+div.breadcrumbs {
+    font-weight: bold;
+}
+
+div.breadcrumbs a {
+    font-weight: normal;
+}
+
+body {
+    font-family: "Lexend", "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+}
