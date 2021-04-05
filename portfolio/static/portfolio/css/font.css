@@ -3,6 +3,10 @@
     #branding h1 {
         font-size: 40px !important;
     }
+
+    #user-tools {
+        text-align: center !important;
+    }
 }
 
 /*index page title*/
