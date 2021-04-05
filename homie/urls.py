@@ -5,6 +5,6 @@ from portfolio.admin import portfolio_admin_site
 
 urlpatterns = [
     path('admin/', portfolio_admin_site.urls),
-    path('', RedirectView.as_view(url='admin')),
+    path('', RedirectView.as_view(url='admin', permanent=True)),
     path('portfolio', include('portfolio.urls'))
 ]
