@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from portfolio.const import Mode
+
+MODE = Mode.LOCAL
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -44,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'pwa',
     'portfolio',
 ]
 
@@ -130,32 +133,3 @@ USE_THOUSAND_SEPARATOR = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-PWA_APP_NAME = 'Homie'
-PWA_APP_DESCRIPTION = "My trusty digital Homie"
-PWA_APP_THEME_COLOR = '#0A0302'
-PWA_APP_BACKGROUND_COLOR = '#ffffff'
-PWA_APP_DISPLAY = 'standalone'
-PWA_APP_SCOPE = '/'
-PWA_APP_ORIENTATION = 'any'
-PWA_APP_START_URL = '/'
-PWA_APP_STATUS_BAR_COLOR = 'default'
-PWA_APP_ICONS = [
-    {
-        'src': '/static/portfolio/android-chrome-192x192.png',
-        'sizes': '192x192'
-    }
-]
-PWA_APP_ICONS_APPLE = [
-    {
-        'src': '/static/portfolio/apple-touch-icon.png',
-        'sizes': '180x180'
-    }
-]
-# PWA_APP_SPLASH_SCREEN = [
-#     {
-#         'src': '/static/images/icons/splash-640x1136.png',
-#         'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
-#     }
-# ]
-PWA_APP_LANG = 'en-US'

@@ -7,3 +7,15 @@ class TransactionType(models.IntegerChoices):
 
     # add funds
     DEPOSIT = 3
+
+
+class Mode(models.TextChoices):
+    LOCAL = 'local'
+    TEST = 'test'
+    LIVE = 'live'
+
+    def get_site_title_for(self, prefix: str) -> str:
+        if self == self.LIVE:
+            return prefix
+        return f"{prefix} ({self})"
+
