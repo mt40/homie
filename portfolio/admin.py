@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
@@ -6,7 +7,7 @@ from portfolio import models
 
 
 class PortfolioAdminSite(admin.AdminSite):
-    site_title = 'Homie'
+    site_title = settings.MODE.get_site_title_for('Homie')
     site_header = 'Homie'
     index_title = ''
 

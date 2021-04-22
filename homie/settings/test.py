@@ -5,6 +5,8 @@ from portfolio import secret_util
 These settings is used by CI and App Engine Test. 
 """
 
+MODE = Mode.TEST
+
 print(f"base dir: {BASE_DIR}")
 
 DATABASES = {
