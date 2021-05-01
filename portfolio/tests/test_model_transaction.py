@@ -4,7 +4,7 @@ from faker import Faker
 from pendulum import DateTime
 
 from portfolio import time_util
-from portfolio.models import Transaction
+from portfolio.models import Transaction, Holding
 
 
 class ModelTransactionTests(TestCase):
@@ -73,3 +73,17 @@ class ModelTransactionTests(TestCase):
         )
 
         self.assertAlmostEqual(now.int_timestamp, txn.transaction_time.int_timestamp, delta=10)
+
+    def test_holding_foreign_key(self):
+        txn, _ = Transaction.objects.get_or_create(
+            symbol='x',
+            price=99,
+            amount=3,
+        )
+        self.assertTrue(Holding.objects.filter(symbol='x').exists())
+
+        txn.refresh_from_db()
+        self.assertEqual(
+            txn.holding,
+            Holding.objects.get(symbol='x')
+        )

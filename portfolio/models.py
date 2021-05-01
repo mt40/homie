@@ -61,6 +61,10 @@ class Transaction(models.Model):
     fee = models.PositiveIntegerField(default=0, help_text="in vnd")
     transaction_time = IntDateTimeField(default=time_util.now)
 
+    # reference to holding of this symbol
+    # this is nullable and we will assign a value once this instance is saved
+    holding = models.ForeignKey('Holding', on_delete=models.PROTECT, null=True)
+
     create_time = IntDateTimeField(auto_now_add=True)
     update_time = IntDateTimeField(auto_now=True)
 
@@ -73,9 +77,9 @@ class Transaction(models.Model):
         return self.price * self.amount + self.fee
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
         holding, _ = Holding.objects.get_or_create(symbol=self.symbol)
+        self.holding = holding
+        super().save(*args, **kwargs)
         holding.update_from_transaction(self)
 
 
