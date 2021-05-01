@@ -17,11 +17,8 @@ portfolio_admin_site.register(User, UserAdmin)
 portfolio_admin_site.register(Group, GroupAdmin)
 
 
-# @admin.register(models.Transaction, site=portfolio_admin_site)
+@admin.register(models.Transaction, site=portfolio_admin_site)
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('symbol', 'price', 'type')
     list_filter = ('type',)
     ordering = ('-create_time', 'symbol')
-
-
-portfolio_admin_site.register(models.Transaction, TransactionAdmin)

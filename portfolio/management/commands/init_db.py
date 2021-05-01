@@ -1,11 +1,9 @@
-import pendulum
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from faker import Faker
-from pendulum import timezone
 
+from portfolio import time_util
 from portfolio.const import TransactionType, DEPOSIT_SYMBOL
-from portfolio.models import Transaction
+from portfolio.models import Transaction, Holding
 
 
 class Command(BaseCommand):
@@ -16,47 +14,45 @@ class Command(BaseCommand):
 
     # testme
     def handle(self, *args, **options):
+        # add a few deposits
         Transaction.objects.get_or_create(
             symbol=DEPOSIT_SYMBOL,
             price=self.fake.random.randint(30000, 100000),
             amount=1,
-            transaction_time=pendulum.now().subtract(days=40),
+            transaction_time=time_util.now().subtract(days=40),
         )
         Transaction.objects.get_or_create(
             symbol=DEPOSIT_SYMBOL,
             price=self.fake.random.randint(30000, 100000),
             amount=1,
-            transaction_time=self.fake.date_time_between(
-                start_date='-30d',
-                end_date='now',
-                tzinfo=timezone(settings.TIME_ZONE)
-            ),
+            transaction_time=time_util.now().subtract(self.fake.pyint(-30, 0)),
         )
 
-        for i in range(0, 10):
-            buy = Transaction.objects.get_or_create(
+        buys = [
+            Transaction.objects.get_or_create(
                 symbol=self.fake.tld().upper(),
                 price=self.fake.random.randint(2000, 30000),
                 amount=self.fake.random.randint(100, 1000),
                 fee=self.fake.random.randint(1000, 5000),
-                transaction_time=self.fake.date_time_between(
-                    start_date='-30d',
-                    end_date='now',
-                    tzinfo=timezone(settings.TIME_ZONE)
-                ),
-            )
-        buys = Transaction.objects.filter(type=TransactionType.BUY).all()
+                transaction_time=time_util.now().subtract(self.fake.pyint(-30, 0)),
+            )[0]
+            for _ in range(0, 10)
+        ]
+
         for buy in buys:
             for i in range(0, self.fake.random.randint(0, 2)):
-                Transaction.objects.get_or_create(
-                    symbol=self.fake.tld().upper(),
-                    type=TransactionType.SELL,
-                    price=self.fake.random.randint(2000, 30000),
-                    amount=self.fake.random.randint(1, buy.amount),
-                    fee=self.fake.random.randint(1000, 5000),
-                    transaction_time=self.fake.date_time_between_dates(
-                        datetime_start=buy.transaction_time,  # todo
-                        datetime_end=pendulum.now(),
-                        tzinfo=timezone(settings.TIME_ZONE)
-                    ),
-                )
+                holding = Holding.objects.get(symbol=buy.symbol)
+                if holding.amount > 0:
+                    Transaction.objects.get_or_create(
+                        symbol=buy.symbol,
+                        type=TransactionType.SELL,
+                        price=self.fake.pyint(2000, 30000),
+                        amount=(
+                            self.fake.pyint(1, holding.amount)
+                        ),
+                        fee=self.fake.pyint(1000, 5000),
+                        transaction_time=min(
+                            time_util.now(),
+                            buy.transaction_time.add(days=self.fake.pyint(0, 10))
+                        ),
+                    )

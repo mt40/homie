@@ -136,3 +136,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_ADMIN_USERNAME='root'
 DEFAULT_ADMIN_PASSWORD='123'
+
+DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'

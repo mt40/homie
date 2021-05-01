@@ -7,7 +7,7 @@ from portfolio import time_util
 from portfolio.models import Transaction
 
 
-class ModelTests(TestCase):
+class ModelTransactionTests(TestCase):
 
     fake = Faker()
     Faker.seed(0)

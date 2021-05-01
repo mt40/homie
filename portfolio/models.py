@@ -65,4 +65,54 @@ class Transaction(models.Model):
     update_time = IntDateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.get_type_display()}: {self.symbol}"
+        return f"{self.get_type_display()}: {self.amount} x {self.symbol}"
+
+    @property
+    def subtotal(self) -> int:
+        """Final cost of this transaction (including fees)"""
+        return self.price * self.amount + self.fee
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        holding, _ = Holding.objects.get_or_create(symbol=self.symbol)
+        holding.update_from_transaction(self)
+
+
+class Holding(models.Model):
+    """
+    Represents the stocks that we are holding for each symbol.
+    """
+
+    class Meta:
+        db_table = "holding_tab"
+        indexes = (models.Index(fields=('symbol',), name='idx_symbol'),)
+
+    symbol = models.CharField(max_length=50, unique=True)
+    amount = models.PositiveIntegerField(default=0)
+    latest_price = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="latest known price of this symbol in vnd"
+    )
+
+    create_time = IntDateTimeField(auto_now_add=True)
+    update_time = IntDateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.symbol
+
+    @property
+    def total_value(self) -> int:
+        return self.amount * self.latest_price
+
+    def update_from_transaction(self, txn: Transaction):
+        if txn.symbol != self.symbol:
+            return
+
+        if txn.type == TransactionType.SELL:
+            self.amount -= txn.amount
+        else:
+            self.amount += txn.amount
+        self.latest_price = txn.price
+        self.save()
