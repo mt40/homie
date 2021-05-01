@@ -9,6 +9,7 @@ db.sqlite3
 # IDE
 backend/backend.iml
 homie.iml
+!.idea/runConfigurations
 
 # secrets
 sa_key.json

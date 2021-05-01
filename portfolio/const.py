@@ -1,6 +1,10 @@
 from django.db import models
 
 
+# symbol of all deposit transactions
+DEPOSIT_SYMBOL = "FUND"
+
+
 class TransactionType(models.IntegerChoices):
     BUY = 1
     SELL = 2

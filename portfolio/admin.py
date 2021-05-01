@@ -17,12 +17,42 @@ portfolio_admin_site.register(User, UserAdmin)
 portfolio_admin_site.register(Group, GroupAdmin)
 
 
-# @admin.register(models.Transaction, site=portfolio_admin_site)
+@admin.register(models.Transaction, site=portfolio_admin_site)
 class TransactionAdmin(admin.ModelAdmin):
-    date_hierarchy = 'transaction_time'
     list_display = ('symbol', 'price', 'type')
     list_filter = ('type',)
     ordering = ('-create_time', 'symbol')
+    fields = ('id', 'symbol',
+              'type',
+              'price',
+              'amount',
+              'fee',
+              'transaction_time',
+              'create_time',
+              'update_time',)
+    readonly_fields = ('id', )
 
 
-portfolio_admin_site.register(models.Transaction, TransactionAdmin)
+class TransactionInline(admin.TabularInline):
+    model = models.Transaction
+    fields = ('price', 'fee', 'subtotal', 'transaction_time')
+    readonly_fields = ('subtotal',)
+
+
+@admin.register(models.Holding, site=portfolio_admin_site)
+class HoldingAdmin(admin.ModelAdmin):
+    list_display = ('symbol', 'amount', 'total_value')
+    ordering = ('symbol', )
+    fields = ('symbol', 'amount', 'latest_price', 'total_value', 'update_time')
+    readonly_fields = ('total_value',)
+    inlines = (TransactionInline, )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
