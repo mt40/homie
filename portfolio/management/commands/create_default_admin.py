@@ -7,6 +7,9 @@ class Command(BaseCommand):
     help = 'Closes the specified poll for voting'
 
     def handle(self, *args, **options):
+        if settings.DEFAULT_ADMIN_PASSWORD is None:
+            raise ValueError('default admin password must be set')
+
         username = settings.DEFAULT_ADMIN_USERNAME
         if not User.objects.filter(username=username).exists():
             User.objects.create_superuser(
