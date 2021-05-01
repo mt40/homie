@@ -1,35 +1,38 @@
 from typing import Optional
 
+import pendulum
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.forms import CharField
 from pendulum import DateTime
+from pendulum.parsing import ParserError
 
 from portfolio import time_util
 from portfolio.const import TransactionType
 
 
-def _parse_timestamp_to_datetime(value: int) -> DateTime:
-    try:
-        return time_util.from_unix_timestamp(value)
-    except TypeError as err:
-        raise ValidationError(str(err))
-
-
-class IntDateTimeField(models.PositiveIntegerField):
+class IntDateTimeField(models.Field):
     def __init__(self, auto_now: bool = False, auto_now_add: bool = False, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.auto_now = auto_now
         self.auto_now_add = auto_now_add
 
+    def db_type(self, connection):
+        return "integer"
+
     def from_db_value(self, value, expression, connection) -> Optional[DateTime]:
         if value is None:
             return value
-        return _parse_timestamp_to_datetime(value)
+        try:
+            return time_util.from_unix_timestamp(value)
+        except TypeError as err:
+            raise ValidationError(str(err))
 
     def to_python(self, value):
-        if value is None or isinstance(value, DateTime):
-            return value
-        return _parse_timestamp_to_datetime(value)
+        try:
+            return time_util.parse(value)
+        except TypeError as err:
+            raise ValidationError(str(err))
 
     def get_prep_value(self, value: DateTime):
         if isinstance(value, int) or value is None:  # already a timestamp
@@ -45,10 +48,27 @@ class IntDateTimeField(models.PositiveIntegerField):
 
         return super().pre_save(model_instance, add)
 
+    def formfield(self, **kwargs):
+        return super().formfield(**{
+            'form_class': CharField,
+            **kwargs,
+        })
+
+    def value_to_string(self, obj):
+        value = self.value_from_object(obj)
+        return str(self.get_prep_value(value))
+
+    # def validate(self, value: str, model_instance):
+    #     try:
+    #         pendulum.parse(value)
+    #     except ParserError as e:
+    #         raise ValidationError(str(e))
+
 
 class Transaction(models.Model):
     class Meta:
         db_table = "transaction_tab"
+        indexes = (models.Index(fields=('symbol', ), name='idx_symbol'), )
 
     # if type is DEPOSIT, symbol is const.DEPOSIT_SYMBOL
     symbol = models.CharField(max_length=50)
@@ -79,8 +99,9 @@ class Transaction(models.Model):
     def save(self, *args, **kwargs):
         holding, _ = Holding.objects.get_or_create(symbol=self.symbol)
         self.holding = holding
+
         super().save(*args, **kwargs)
-        holding.update_from_transaction(self)
+        holding.recalculate()
 
 
 class Holding(models.Model):
@@ -90,7 +111,6 @@ class Holding(models.Model):
 
     class Meta:
         db_table = "holding_tab"
-        indexes = (models.Index(fields=('symbol',), name='idx_symbol'),)
 
     symbol = models.CharField(max_length=50, unique=True)
     amount = models.PositiveIntegerField(default=0)
@@ -110,13 +130,14 @@ class Holding(models.Model):
     def total_value(self) -> int:
         return self.amount * self.latest_price
 
-    def update_from_transaction(self, txn: Transaction):
-        if txn.symbol != self.symbol:
-            return
+    def recalculate(self):
+        transactions = Transaction.objects.filter(symbol=self.symbol).order_by('transaction_time').all()
 
-        if txn.type == TransactionType.SELL:
-            self.amount -= txn.amount
-        else:
-            self.amount += txn.amount
-        self.latest_price = txn.price
+        self.amount = 0
+        for txn in transactions:
+            if txn.type == TransactionType.SELL:
+                self.amount -= txn.amount
+            else:
+                self.amount += txn.amount
+            self.latest_price = txn.price
         self.save()

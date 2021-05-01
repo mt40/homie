@@ -22,6 +22,15 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = ('symbol', 'price', 'type')
     list_filter = ('type',)
     ordering = ('-create_time', 'symbol')
+    fields = ('id', 'symbol',
+              'type',
+              'price',
+              'amount',
+              'fee',
+              'transaction_time',
+              'create_time',
+              'update_time',)
+    readonly_fields = ('id', )
 
 
 class TransactionInline(admin.TabularInline):

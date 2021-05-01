@@ -15,3 +15,8 @@ class TimeUtilTests(TestCase):
     def test_from_unix_timestamp_error(self):
         ts = 'a'
         self.assertRaises(TypeError, lambda: time_util.from_unix_timestamp(ts))
+
+    def test_str(self):
+        now = time_util.from_unix_timestamp(1619508998)
+        expect = '2021-04-27 14:36:38'
+        self.assertEqual(expect, str(now))
