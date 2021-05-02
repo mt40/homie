@@ -53,9 +53,9 @@ jobs:
       - name: Create a default admin user
         run: python manage.py create_default_admin
 
-  test_deploy:
+  check:
     runs-on: ubuntu-18.04
-    name: Test Deploy
+    name: Check
     environment: test
     needs: deploy_to_app_engine
     steps:

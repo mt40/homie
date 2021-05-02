@@ -58,12 +58,6 @@ class IntDateTimeField(models.Field):
         value = self.value_from_object(obj)
         return str(self.get_prep_value(value))
 
-    # def validate(self, value: str, model_instance):
-    #     try:
-    #         pendulum.parse(value)
-    #     except ParserError as e:
-    #         raise ValidationError(str(e))
-
 
 class Transaction(models.Model):
     class Meta:

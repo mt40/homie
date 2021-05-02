@@ -30,7 +30,7 @@ class TransactionAdmin(admin.ModelAdmin):
               'transaction_time',
               'create_time',
               'update_time',)
-    readonly_fields = ('id', )
+    readonly_fields = ('id', 'create_time', 'update_time')
 
 
 class TransactionInline(admin.TabularInline):
