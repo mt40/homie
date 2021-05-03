@@ -41,7 +41,7 @@ jobs:
         with:
           project_id: ${{ secrets.PROJECT_ID }}
           credentials: ${{ secrets.GCP_SA_KEY }}
-          deliverables: app.yaml
+          deliverables: app.test.yaml
       - name: Setup Cloud SQL Proxy
         uses: mattes/gce-cloudsql-proxy-action@v1
         with:
