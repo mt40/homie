@@ -19,6 +19,7 @@ jobs:
       LIVE_DB_NAME: ${{ secrets.DB_NAME }}
       LIVE_DEFAULT_ADMIN_USERNAME: ${{ secrets.DEFAULT_ADMIN_USERNAME }}
       LIVE_DEFAULT_ADMIN_PASSWORD: ${{ secrets.DEFAULT_ADMIN_PASSWORD }}
+      LIVE_DJANGO_SECRET: ${{ secrets.DJANGO_SECRET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
