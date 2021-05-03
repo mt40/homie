@@ -1,24 +1,24 @@
-name: Deploy To Test
+name: Deploy To Live
 
 on:
   push:
-    branches: [ master ]
+    branches: [ release ]
 
 jobs:
   deploy_to_app_engine:
     runs-on: ubuntu-18.04
     name: Deploy to GCP App Engine
-    environment: test
+    environment: live
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
-      DJANGO_SETTINGS_MODULE: homie.settings.test
+      DJANGO_SETTINGS_MODULE: homie.settings.live
       CLOUD_SQL_CONNECTION_NAME: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
-      TEST_DB_HOST: '127.0.0.1'
-      TEST_DB_USER: ${{ secrets.DB_USER }}
-      TEST_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      TEST_DB_NAME: ${{ secrets.DB_NAME }}
-      DEFAULT_ADMIN_USERNAME: ${{ secrets.DEFAULT_ADMIN_USERNAME }}
-      DEFAULT_ADMIN_PASSWORD: ${{ secrets.DEFAULT_ADMIN_PASSWORD }}
+      LIVE_DB_HOST: '127.0.0.1'
+      LIVE_DB_USER: ${{ secrets.DB_USER }}
+      LIVE_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      LIVE_DB_NAME: ${{ secrets.DB_NAME }}
+      LIVE_DEFAULT_ADMIN_USERNAME: ${{ secrets.DEFAULT_ADMIN_USERNAME }}
+      LIVE_DEFAULT_ADMIN_PASSWORD: ${{ secrets.DEFAULT_ADMIN_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
