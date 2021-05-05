@@ -3,8 +3,25 @@
 import os
 import sys
 
+import logging
+from google.auth.exceptions import DefaultCredentialsError
+
+
+logger = logging.getLogger(__name__)
+
 
 def main():
+    # for GCP Cloud Debugger
+    try:
+        import googleclouddebugger
+        googleclouddebugger.enable(
+            breakpoint_enable_canary=True
+        )
+    except ImportError:
+        pass
+    except DefaultCredentialsError as error:
+        logger.error(str(error))
+
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'homie.settings.local')
     try:

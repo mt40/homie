@@ -4,3 +4,4 @@ django-chartjs==2.2.1
 google-cloud-secret-manager==2.4.0
 Faker==8.1.0
 pendulum==2.1.2
+google-python-cloud-debugger
