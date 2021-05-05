@@ -60,4 +60,4 @@ jobs:
     needs: deploy_to_app_engine
     steps:
       - name: get_request
-        run: curl "${{ secrets.APP_URL }}"
+        run: curl --fail "${{ secrets.APP_URL }}"
