@@ -17,6 +17,7 @@ jobs:
       LIVE_DB_USER: ${{ secrets.DB_USER }}
       LIVE_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       LIVE_DB_NAME: ${{ secrets.DB_NAME }}
+      APP_DB_USER: ${{ secrets.APP_DB_USER }}
       LIVE_DEFAULT_ADMIN_USERNAME: ${{ secrets.DEFAULT_ADMIN_USERNAME }}
       LIVE_DEFAULT_ADMIN_PASSWORD: ${{ secrets.DEFAULT_ADMIN_PASSWORD }}
       LIVE_DJANGO_SECRET: ${{ secrets.DJANGO_SECRET }}
@@ -51,6 +52,8 @@ jobs:
           proxy_version: 1.20.2
       - name: Migrate DB
         run: python manage.py migrate
+      - name: Grant DB privileges
+        run: python manage.py grant_db_privileges
       - name: Create a default admin user
         run: python manage.py create_default_admin
 
