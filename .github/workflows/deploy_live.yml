@@ -24,21 +24,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - uses: actions/setup-python@v2
         with:
           python-version: '3.7'
+
       - name: System check
         shell: bash
         run: |
           ls -alh
           python --version
           pip --version
+
       - name: Build
-        run: |
-          pip install -r requirements.txt
-          python manage.py collectstatic
+        run: pip install -r requirements.txt
+
+      - name: Collect static files
+        run: python manage.py collectstatic
+
       - name: Deploy check
         run: python manage.py check --deploy
+
       - id: deploy
         name: Deploy
         uses: google-github-actions/deploy-appengine@main
@@ -46,16 +52,20 @@ jobs:
           project_id: ${{ secrets.PROJECT_ID }}
           credentials: ${{ secrets.GCP_SA_KEY }}
           deliverables: app.live.yaml
+
       - name: Setup Cloud SQL Proxy
         uses: mattes/gce-cloudsql-proxy-action@v1
         with:
           creds: ${{ secrets.GCP_SA_KEY_JSON }}
           instance: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}
           proxy_version: 1.20.2
+
       - name: Migrate DB
         run: python manage.py migrate
+
       - name: Grant DB privileges
         run: python manage.py grant_db_privileges
+
       - name: Create a default admin user
         run: python manage.py create_default_admin
 
