@@ -13,6 +13,7 @@ print(f"base dir: {BASE_DIR}")
 SECRET_KEY = secret_util.get_latest('LIVE_DJANGO_SECRET')
 
 ALLOWED_HOSTS = [
+    "localhost",
     "127.0.0.1",
     "homie-mt-2021-live.et.r.appspot.com",
     "homie-mt-2021-live.appspot.com",
