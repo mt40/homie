@@ -37,6 +37,8 @@ jobs:
         run: |
           pip install -r requirements.txt
           python manage.py collectstatic
+      - name: Deploy check
+        run: python manage.py check --deploy
       - id: deploy
         name: Deploy
         uses: google-github-actions/deploy-appengine@main
