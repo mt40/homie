@@ -1,4 +1,13 @@
-# Homie
+<h1 align="center">Homie</h1>
+
+<p align="center">
+  <img src="https://github.com/mt40/homie/actions/workflows/deploy_test.yml/badge.svg?branch=master">
+  <img src="https://github.com/mt40/homie/actions/workflows/deploy_live.yml/badge.svg?branch=release">
+  <br>
+  <a href="https://github.com/mt40/homie/compare/release...master">Request Live Deployment</a>
+  <br><br>
+  <img src="https://lparchive.org/Grand-Theft-Auto-San-Andreas-(Screenshot)/Update%2021/6-gtasa06.gif">
+</p>
 
 A personal assistant.
 
