@@ -12,7 +12,6 @@ class Command(BaseCommand):
     fake = Faker()
     Faker.seed(0)
 
-    # testme
     def handle(self, *args, **options):
         # add a few deposits
         Transaction.objects.get_or_create(

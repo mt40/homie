@@ -3,7 +3,7 @@
 # This file imports the WSGI-compatible object of your Django app,
 # application from mysite/wsgi.py and renames it app so it is discoverable by
 # App Engine without additional configuration.
-# Alternatively, you can add a custom entrypoint field in your app.yaml:
+# Alternatively, you can add a custom entrypoint field in your app.test.yaml:
 # entrypoint: gunicorn -b :$PORT mysite.wsgi
 
 from homie.wsgi import application

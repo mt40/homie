@@ -18,3 +18,6 @@ DATABASES = {
         'NAME': secret_util.get_latest('TEST_DB_NAME')
     }
 }
+
+DEFAULT_ADMIN_USERNAME = secret_util.get_latest('TEST_DEFAULT_ADMIN_USERNAME')
+DEFAULT_ADMIN_PASSWORD = secret_util.get_latest('TEST_DEFAULT_ADMIN_PASSWORD')
