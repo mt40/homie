@@ -30,11 +30,7 @@ SECRET_KEY = '4hjm5d57_k=vj-109sajy#^3p!ckb7c9+6s05f36=(f=@cznv7'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "192.168.68.99",
-    "homie-mt-2021.et.r.appspot.com",
-    "homie-mt-2021.appspot.com",
+    "*",
 ]
 
 

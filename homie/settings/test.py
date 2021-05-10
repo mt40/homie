@@ -9,6 +9,13 @@ MODE = Mode.TEST
 
 print(f"base dir: {BASE_DIR}")
 
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "homie-mt-2021.et.r.appspot.com",
+    "homie-mt-2021.appspot.com",
+]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
