@@ -17,6 +17,8 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "homie-mt-2021-live.et.r.appspot.com",
     "homie-mt-2021-live.appspot.com",
+    "homie.minhthai.me",
+    "minhthai.me",
 ]
 
 DATABASES = {
