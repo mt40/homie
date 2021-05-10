@@ -4,6 +4,10 @@
 {% block extrastyle %}
   {{ block.super }}
 
+  <link rel="shortcut icon" href="{% static 'portfolio/images/favicon.ico' %}" type="image/x-icon">
+  <link rel="shortcut icon" sizes="192x192" href="{% static 'portfolio/images/favicon-192x192.png' %}" type="image/x-icon">
+  <link rel="shortcut icon" sizes="256x256" href="{% static 'portfolio/images/favicon-256x256.png' %}" type="image/x-icon">
+
   <link rel="stylesheet" href="{% static 'portfolio/css/variables.css' %}"/>
   <link rel="stylesheet" href="{% static 'portfolio/css/color.css' %}"/>
   <link rel="stylesheet" href="{% static 'portfolio/css/font.css' %}"/>
