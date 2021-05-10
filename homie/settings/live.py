@@ -33,3 +33,7 @@ DATABASES = {
 
 DEFAULT_ADMIN_USERNAME = secret_util.get_latest('LIVE_DEFAULT_ADMIN_USERNAME')
 DEFAULT_ADMIN_PASSWORD = secret_util.get_latest('LIVE_DEFAULT_ADMIN_PASSWORD')
+
+
+# automatically log out after a short time (in seconds)
+SESSION_COOKIE_AGE = 15 * 60
