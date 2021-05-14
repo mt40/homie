@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 
-from portfolio import models
+from portfolio import models, finance_util
 
 
 class PortfolioAdminSite(admin.AdminSite):
@@ -47,6 +47,8 @@ class HoldingAdmin(admin.ModelAdmin):
     readonly_fields = ('total_value',)
     inlines = (TransactionInline, )
 
+    change_list_template = "admin/holding_changelist_template.html"
+
     def has_add_permission(self, request):
         return False
 
@@ -55,4 +57,12 @@ class HoldingAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def changelist_view(self, request, extra_context=None):
+        return super().changelist_view(request, extra_context={
+            **(extra_context or {}),
+            'net_worth': finance_util.get_net_worth()
+        })
+
+
 
