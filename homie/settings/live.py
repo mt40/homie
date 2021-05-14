@@ -1,3 +1,5 @@
+from google.auth.exceptions import DefaultCredentialsError
+
 from homie.settings.local import *
 from portfolio import secret_util
 
@@ -37,3 +39,32 @@ DEFAULT_ADMIN_PASSWORD = secret_util.get_latest('LIVE_DEFAULT_ADMIN_PASSWORD')
 
 # automatically log out after a short time (in seconds)
 SESSION_COOKIE_AGE = 15 * 60
+
+
+try:
+    from google.cloud import logging
+    # Instantiates a client
+    client = logging.Client()
+    # Connects the logger to the root logging handler; by default
+    # this captures all logs at INFO level and higher
+    client.setup_logging()
+
+    LOGGING = {
+        'version': 1,
+        'handlers': {
+            'cloud_logging': {
+                'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
+                'client': client
+            }
+        },
+        'loggers': {
+            '': {  # root logger
+                'handlers': ['cloud_logging'],
+                'level': 'WARNING',
+                'name': 'live_app',
+                'propagate': True
+            }
+        },
+    }
+except DefaultCredentialsError as error:
+    print(str(error))
