@@ -1,6 +1,5 @@
 import logging
 
-from django.http import HttpResponse
 from django.shortcuts import render
 
 
@@ -8,10 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def index(request):
-    logger.info("hello world!")
-    logger.warning("shit!")
-    return HttpResponse('ok')
-    # return render(request, 'portfolio/index.html')
+    return render(request, 'portfolio/index.html')
 
 
 from django.views.generic import TemplateView
