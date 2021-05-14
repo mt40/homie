@@ -1,11 +1,9 @@
 from typing import Optional
 
-import pendulum
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.forms import CharField
 from pendulum import DateTime
-from pendulum.parsing import ParserError
 
 from portfolio import time_util
 from portfolio.const import TransactionType
