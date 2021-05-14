@@ -53,7 +53,6 @@ try:
             '': {  # root logger
                 'handlers': ['cloud_logging'],
                 'level': 'INFO',
-                'name': 'test_app',
                 'propagate': True
             }
         },

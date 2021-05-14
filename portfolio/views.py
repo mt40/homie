@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 def index(request):
     logger.info("hello world!")
+    logger.warning("shit!")
     return HttpResponse('ok')
     # return render(request, 'portfolio/index.html')
 
