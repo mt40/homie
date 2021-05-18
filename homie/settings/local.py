@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'portfolio',
+    'money',
+    'admin_site',
 ]
 
 MIDDLEWARE = [

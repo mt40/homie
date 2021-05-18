@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.test import TestCase
 
-from portfolio.management.commands import create_default_admin
+from admin_site.management.commands import create_default_admin
 
 
 class CreateDefaultAdminTest(TestCase):
