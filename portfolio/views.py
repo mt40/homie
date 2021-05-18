@@ -1,7 +1,9 @@
 import logging
 
+from django.contrib.admin import AdminSite
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-
+from django.template.response import TemplateResponse
 
 logger = logging.getLogger(__name__)
 
@@ -33,3 +35,18 @@ class LineChartJSONView(BaseLineChartView):
 
 line_chart = TemplateView.as_view(template_name='line_chart.html')
 line_chart_json = LineChartJSONView.as_view()
+
+
+class CalculatorView(TemplateView):
+    template_name = "portfolio/calculator.html"
+    admin_site: AdminSite = None
+
+    def get(self, request, *args, **kwargs):
+        request.current_app = self.admin_site.name
+        return super().get(request, *args, **kwargs)
+
+
+def calculator_view(admin_site: AdminSite, request: HttpRequest) -> HttpResponse:
+    # see https://docs.djangoproject.com/en/3.2/ref/contrib/admin/#adding-views-to-admin-sites
+    request.current_app = admin_site.name
+    return TemplateResponse(request, "portfolio/calculator.html")

@@ -2,14 +2,26 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
+from django.urls import path
 
-from portfolio import models as portfolio_models, finance_util
 from money import models as money_models
+from portfolio import models as portfolio_models, finance_util, views as portfolio_views
+from portfolio.apps import PortfolioConfig
+
 
 class HomieAdminSite(admin.AdminSite):
     site_title = settings.MODE.get_site_title_for('Homie')
     site_header = 'Homie'
     index_title = ''
+
+    def get_urls(self):
+        extra_urls = [
+            path(
+                f'{PortfolioConfig.name}/calculator',
+                portfolio_views.CalculatorView.as_view(admin_site=self),
+                name="calculator"),
+        ]
+        return extra_urls + super().get_urls()
 
 
 homie_admin_site = HomieAdminSite(name='portfolio_admin')
