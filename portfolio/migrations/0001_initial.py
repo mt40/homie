@@ -2,6 +2,8 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
+
+import common.models
 import portfolio.models
 import portfolio.time_util
 
@@ -21,8 +23,8 @@ class Migration(migrations.Migration):
                 ('symbol', models.CharField(max_length=50, unique=True)),
                 ('amount', models.PositiveIntegerField(default=0)),
                 ('latest_price', models.PositiveIntegerField(blank=True, help_text='latest known price of this symbol in vnd', null=True)),
-                ('create_time', portfolio.models.IntDateTimeField()),
-                ('update_time', portfolio.models.IntDateTimeField()),
+                ('create_time', common.models.IntDateTimeField()),
+                ('update_time', common.models.IntDateTimeField()),
             ],
             options={
                 'db_table': 'holding_tab',
@@ -37,9 +39,9 @@ class Migration(migrations.Migration):
                 ('price', models.PositiveIntegerField(help_text='in vnd')),
                 ('amount', models.PositiveIntegerField()),
                 ('fee', models.PositiveIntegerField(default=0, help_text='in vnd')),
-                ('transaction_time', portfolio.models.IntDateTimeField(default=portfolio.time_util.now)),
-                ('create_time', portfolio.models.IntDateTimeField()),
-                ('update_time', portfolio.models.IntDateTimeField()),
+                ('transaction_time', common.models.IntDateTimeField(default=portfolio.time_util.now)),
+                ('create_time', common.models.IntDateTimeField()),
+                ('update_time', common.models.IntDateTimeField()),
                 ('holding', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='portfolio.holding')),
             ],
             options={
