@@ -15,16 +15,29 @@ class HomieAdminSite(admin.AdminSite):
     index_title = ''
 
     def get_urls(self):
+        """
+        Urls here can be reversed with namespace "homie_admin"
+        """
         extra_urls = [
             path(
                 f'{PortfolioConfig.name}/calculator',
-                portfolio_views.CalculatorView.as_view(admin_site=self),
-                name="calculator"),
+                self.admin_view(
+                    portfolio_views.CalculatorView.as_view()
+                ),
+                name="calculator"
+            ),
+            path(
+                f'{PortfolioConfig.name}/calculator-result/<int:result>',
+                self.admin_view(
+                    portfolio_views.CalculatorResultView.as_view()
+                ),
+                name="calculator_result"
+            ),
         ]
         return extra_urls + super().get_urls()
 
 
-homie_admin_site = HomieAdminSite(name='portfolio_admin')
+homie_admin_site = HomieAdminSite(name='homie_admin')
 homie_admin_site.register(User, UserAdmin)
 homie_admin_site.register(Group, GroupAdmin)
 
