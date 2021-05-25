@@ -64,7 +64,9 @@ ROOT_URLCONF = 'homie.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates"],
+        'DIRS': [
+            "admin_site/templates"
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
