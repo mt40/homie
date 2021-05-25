@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from admin_site.const import UrlName
+from portfolio.models import Holding
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,7 @@ line_chart_json = LineChartJSONView.as_view()
 
 class CalculatorComputeResult(pydantic.BaseModel):
     # current situation
-    available_cash: int
+    fund: int
     risking_cash: int
     stop_loss_percent: float
 
@@ -51,40 +52,39 @@ class CalculatorComputeResult(pydantic.BaseModel):
     suggested_sell_prices: str
 
 
+# todo: add constraints
 class CalculatorResultForm(forms.Form):
-    available_cash = forms.IntegerField(
-        disabled=True,
-        help_text='in vnd'
+    fund = forms.IntegerField(
+        help_text=(
+            'in vnd<br/>'
+            'Available fund for buying'
+        )
     )
     risking_cash = forms.IntegerField(
-        disabled=True,
         help_text=(
-            'in vnd'
+            'in vnd<br/>'
             'The cash that we are risking in this '
             'transaction a.k.a our max possible loss.'
         )
     )
     stop_loss_percent = forms.FloatField(
-        disabled=True,
+        min_value=3,
+        max_value=8,
         help_text=(
-            'in vnd'
+            'in vnd<br/>'
             'Percentage of the input stop loss. '
             'This is the diff between Stop Loss and Buy Price, '
-            'should be 3% - 8% only'
+            'should be <b>3% - 8%</b> only'
         )
     )
-    suggested_buy_amount = forms.IntegerField(
-        disabled=True,
-    )
+    suggested_buy_amount = forms.IntegerField()
     total_buy_value = forms.IntegerField(
-        disabled=True,
         help_text='in vnd'
     )
     suggested_sell_prices = forms.CharField(
-        disabled=True,
         help_text=(
-            'in vnd'
-            'Sell from 3R - 10R, protect our profit, DON’T BE GREEDY!'
+            'in vnd<br/>'
+            'Sell from <b>3R - 10R</b>, protect our profit, <b>DON’T BE GREEDY!</b>'
         )
     )
 
@@ -93,6 +93,9 @@ class CalculatorResultView(FormView):
     http_method_names = ['get']
     template_name = "portfolio/calculator_result.html"
     form_class = CalculatorResultForm
+
+    def get_form(self, form_class=None):
+        return self.get_form_class()(self.get_initial())
 
     def get_initial(self):
         fields = CalculatorComputeResult.schema()['properties'].keys()
@@ -108,8 +111,9 @@ class CalculatorResultView(FormView):
 class CalculatorForm(forms.Form):
     risk = forms.FloatField(
         min_value=0,
+        initial=1,
         help_text='Possible loss over our capital, '
-                  'should be 1% so that we can make 50 lost '
+                  'should be <b>1%</b> so that we can make 50 lost '
                   'trades and still have half money.'
     )
     buy_price = forms.IntegerField(
@@ -147,11 +151,20 @@ class CalculatorView(FormView):
     # testme
     @staticmethod
     def compute(risk: float, buy_price: int, stop_loss: int, trading_fee: int) -> CalculatorComputeResult:
+        fund = Holding.get_fund()
+        risking_cash = fund * risk / 100
+        loss = buy_price - stop_loss
+        stop_loss_percent = loss / buy_price * 100
+        amount = int((risking_cash - 2 * trading_fee) / loss)
+        total_value = amount * buy_price
+        sell_price_min = buy_price + loss * 3
+        sell_price_max = buy_price + loss * 10
+
         return CalculatorComputeResult(
-            available_cash=1,
-            risking_cash=1,
-            stop_loss_percent=1,
-            suggested_buy_amount=1,
-            total_buy_value=1,
-            suggested_sell_prices='10 - 20',
+            fund=fund,
+            risking_cash=risking_cash,
+            stop_loss_percent=stop_loss_percent,
+            suggested_buy_amount=amount,
+            total_buy_value=total_value,
+            suggested_sell_prices=f'{sell_price_min} - {sell_price_max}',
         )

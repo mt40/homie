@@ -28,7 +28,7 @@ class HomieAdminSite(admin.AdminSite):
             ),
             path(
                 f'{PortfolioConfig.name}/calculator-result/'
-                f'<int:available_cash>/'
+                f'<int:fund>/'
                 f'<int:risking_cash>/'
                 f'<str:stop_loss_percent>/'
                 f'<int:suggested_buy_amount>/'

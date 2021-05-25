@@ -1,7 +1,7 @@
 from django.db import models
 
 from common.models import IntDateTimeField
-from portfolio import time_util
+from portfolio import time_util, const
 from portfolio.const import TransactionType
 
 
@@ -81,3 +81,11 @@ class Holding(models.Model):
                 self.amount += txn.amount
             self.latest_price = txn.price
         self.save()
+
+    @staticmethod
+    def get_fund() -> int:
+        """
+        Returns the available fund.
+        """
+        entries = Holding.objects.filter(symbol=const.DEPOSIT_SYMBOL)
+        return sum([e.total_value for e in entries])
