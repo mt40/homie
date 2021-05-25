@@ -1,8 +1,11 @@
 Django==3.2
 psycopg2-binary>=2.8
 django-chartjs==2.2.1
-google-cloud-secret-manager==2.4.0
 Faker==8.1.0
 pendulum==2.1.2
+pydantic==1.8.2
+
+# google cloud
+google-cloud-secret-manager==2.4.0
 google-python-cloud-debugger==2.17
 google-cloud-logging==2.3.1

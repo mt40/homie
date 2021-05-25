@@ -1,8 +1,11 @@
 import logging
 
+import pydantic
 from django import forms
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+
+from admin_site.const import UrlName
 
 logger = logging.getLogger(__name__)
 
@@ -35,18 +38,71 @@ class LineChartJSONView(BaseLineChartView):
 line_chart = TemplateView.as_view(template_name='line_chart.html')
 line_chart_json = LineChartJSONView.as_view()
 
-class CalculatorResultView(TemplateView):
+
+class CalculatorComputeResult(pydantic.BaseModel):
+    # current situation
+    available_cash: int
+    risking_cash: int
+    stop_loss_percent: float
+
+    # suggestions
+    suggested_buy_amount: int
+    total_buy_value: int
+    suggested_sell_prices: str
+
+
+class CalculatorResultForm(forms.Form):
+    available_cash = forms.IntegerField(
+        disabled=True,
+        help_text='in vnd'
+    )
+    risking_cash = forms.IntegerField(
+        disabled=True,
+        help_text=(
+            'in vnd'
+            'The cash that we are risking in this '
+            'transaction a.k.a our max possible loss.'
+        )
+    )
+    stop_loss_percent = forms.FloatField(
+        disabled=True,
+        help_text=(
+            'in vnd'
+            'Percentage of the input stop loss. '
+            'This is the diff between Stop Loss and Buy Price, '
+            'should be 3% - 8% only'
+        )
+    )
+    suggested_buy_amount = forms.IntegerField(
+        disabled=True,
+    )
+    total_buy_value = forms.IntegerField(
+        disabled=True,
+        help_text='in vnd'
+    )
+    suggested_sell_prices = forms.CharField(
+        disabled=True,
+        help_text=(
+            'in vnd'
+            'Sell from 3R - 10R, protect our profit, DON’T BE GREEDY!'
+        )
+    )
+
+
+class CalculatorResultView(FormView):
     http_method_names = ['get']
     template_name = "portfolio/calculator_result.html"
+    form_class = CalculatorResultForm
 
-    def get_context_data(self, **kwargs):
+    def get_initial(self):
+        fields = CalculatorComputeResult.schema()['properties'].keys()
         return {
-            **super().get_context_data(**kwargs),
-            'result': kwargs['result']
+            **super().get_initial(),
+            **{
+                field: self.kwargs[field]
+                for field in fields
+            }
         }
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
 
 
 class CalculatorForm(forms.Form):
@@ -77,7 +133,25 @@ class CalculatorView(FormView):
 
     def form_valid(self, form: CalculatorForm):
         logger.info(form.cleaned_data)
-        # todo: computation here
-        return redirect(to=reverse_lazy('homie_admin:calculator_result', kwargs={
-            'result': 10
-        }))
+        result = self.compute(
+            risk=float(form.cleaned_data['risk']),
+            buy_price=int(form.cleaned_data['buy_price']),
+            stop_loss=int(form.cleaned_data['stop_loss']),
+            trading_fee=int(form.cleaned_data['trading_fee']),
+        )
+
+        return redirect(
+            to=reverse_lazy(UrlName.CALCULATOR_RESULT.value, kwargs=result.dict())
+        )
+
+    # testme
+    @staticmethod
+    def compute(risk: float, buy_price: int, stop_loss: int, trading_fee: int) -> CalculatorComputeResult:
+        return CalculatorComputeResult(
+            available_cash=1,
+            risking_cash=1,
+            stop_loss_percent=1,
+            suggested_buy_amount=1,
+            total_buy_value=1,
+            suggested_sell_prices='10 - 20',
+        )

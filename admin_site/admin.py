@@ -27,7 +27,13 @@ class HomieAdminSite(admin.AdminSite):
                 name="calculator"
             ),
             path(
-                f'{PortfolioConfig.name}/calculator-result/<int:result>',
+                f'{PortfolioConfig.name}/calculator-result/'
+                f'<int:available_cash>/'
+                f'<int:risking_cash>/'
+                f'<str:stop_loss_percent>/'
+                f'<int:suggested_buy_amount>/'
+                f'<int:total_buy_value>/'
+                f'<str:suggested_sell_prices>/',
                 self.admin_view(
                     portfolio_views.CalculatorResultView.as_view()
                 ),
