@@ -1,11 +1,8 @@
 import logging
 
 from django import forms
-from django.contrib.admin import AdminSite
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.template.response import TemplateResponse
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +35,6 @@ class LineChartJSONView(BaseLineChartView):
 line_chart = TemplateView.as_view(template_name='line_chart.html')
 line_chart_json = LineChartJSONView.as_view()
 
-# testme
 class CalculatorResultView(TemplateView):
     http_method_names = ['get']
     template_name = "portfolio/calculator_result.html"
@@ -74,7 +70,6 @@ class CalculatorForm(forms.Form):
     )
 
 
-# testme
 class CalculatorView(FormView):
     http_method_names = ['get', 'post']
     template_name = "portfolio/calculator.html"
