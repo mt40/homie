@@ -4,8 +4,22 @@ caption {
 
 .navbar-toggler {
   border-color: transparent !important;
+  color: var(--body-fg);
 }
 
 .welcome-msg {
   margin-top: 10px;
+}
+
+body {
+  background-color: var(--body-bg);
+  color: var(--body-fg);
+}
+
+.navbar {
+  color: var(--body-fg);
+}
+
+.navbar .navbar-brand {
+  color: var(--body-fg);
 }

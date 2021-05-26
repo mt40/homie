@@ -1,15 +1,15 @@
 {% load i18n static %}
 
-<nav class="navbar navbar-light bg-white">
+<nav class="navbar">
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'homie_admin:index' %}">
       <img src="{% static 'admin_site/images/wsb.png' %}" alt="" width="24" height="24"
            class="d-inline-block align-text-top">
-      Homie
+      <span class="site_name">Homie</span>
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_menu_btn">
-      <span class="navbar-toggler-icon"></span>
+      <i class="fas fa-bars"></i>
     </button>
 
     <div class="collapse navbar-collapse" id="navbar_menu_btn">
