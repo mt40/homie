@@ -1,8 +1,6 @@
 {% extends "admin/index.html" %}
 {% load static %}
 
-{% block title %}{{ site_title|default:_('Django site admin') }}{% endblock %}
-
 {% block content %}
   <div id="content-main">
     {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
