@@ -1,6 +1,6 @@
 {% load i18n static %}
 
-<nav class="navbar navbar-light bg-light">
+<nav class="navbar navbar-light bg-white">
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'homie_admin:index' %}">
       <img src="{% static 'admin_site/images/wsb.png' %}" alt="" width="24" height="24"
@@ -16,7 +16,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
         <!-- welcome message -->
-        <li class="nav-item">
+        <li class="nav-item welcome-msg">
           <span class="badge bg-primary fs-5">
           {% translate 'Welcome,' %}
           <strong>{% firstof user.get_short_name user.get_username %}</strong>.

@@ -5,3 +5,7 @@ caption {
 .navbar-toggler {
   border-color: transparent !important;
 }
+
+.welcome-msg {
+  margin-top: 10px;
+}
