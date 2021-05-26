@@ -1,0 +1,21 @@
+{% extends "admin/index.html" %}
+{% load static %}
+
+{% block content %}
+  <div id="content-main">
+    {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+
+    <!-- calculator -->
+    <div class="module">
+      <table>
+        <caption>Tools</caption>
+        <tbody>
+        <tr>
+          <th scope="row"><a href="{% url 'homie_admin:calculator' %}">Calculator</a></th>
+          <td></td>  <!-- need this to make the table spans 100 width -->
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

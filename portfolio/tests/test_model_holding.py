@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from portfolio import const
 from portfolio.const import TransactionType
 from portfolio.models import Holding, Transaction
 
@@ -31,3 +32,20 @@ class ModelHoldingTests(TestCase):
         )
         holding.refresh_from_db()
         self.assertEqual(0, holding.total_value)
+
+    def test_get_fund(self):
+        Transaction.objects.get_or_create(
+            symbol=const.DEPOSIT_SYMBOL,
+            price=10,
+            amount=3,
+        )
+        Transaction.objects.get_or_create(
+            symbol=const.DEPOSIT_SYMBOL,
+            price=5,
+            amount=1,
+        )
+
+        expect = 5 * 3 + 5 * 1  # latest price is 5
+        rs = Holding.get_fund()
+
+        self.assertEqual(expect, rs)

@@ -2,17 +2,48 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
+from django.urls import path
 
-from portfolio import models as portfolio_models, finance_util
 from money import models as money_models
+from portfolio import models as portfolio_models, finance_util, views as portfolio_views
+from portfolio.apps import PortfolioConfig
+
 
 class HomieAdminSite(admin.AdminSite):
     site_title = settings.MODE.get_site_title_for('Homie')
     site_header = 'Homie'
     index_title = ''
 
+    def get_urls(self):
+        """
+        Urls here can be reversed with namespace "homie_admin"
+        """
+        extra_urls = [
+            path(
+                f'{PortfolioConfig.name}/calculator',
+                self.admin_view(
+                    portfolio_views.CalculatorView.as_view()
+                ),
+                name="calculator"
+            ),
+            path(
+                f'{PortfolioConfig.name}/calculator-result/'
+                f'<int:fund>/'
+                f'<int:risking_cash>/'
+                f'<str:stop_loss_percent>/'
+                f'<int:suggested_buy_amount>/'
+                f'<int:total_buy_value>/'
+                f'<str:suggested_sell_prices>/',
+                self.admin_view(
+                    portfolio_views.CalculatorResultView.as_view()
+                ),
+                name="calculator_result"
+            ),
+        ]
+        return extra_urls + super().get_urls()
 
-homie_admin_site = HomieAdminSite(name='portfolio_admin')
+
+homie_admin_site = HomieAdminSite(name='homie_admin')
 homie_admin_site.register(User, UserAdmin)
 homie_admin_site.register(Group, GroupAdmin)
 
