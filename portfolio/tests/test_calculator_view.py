@@ -10,7 +10,7 @@ class CalculatorViewTests(BaseTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.test_result = CalculatorComputeResult(
-            available_cash=111,
+            fund=111,
             risking_cash=222,
             stop_loss_percent=20.5,
             suggested_buy_amount=333,
