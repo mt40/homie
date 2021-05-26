@@ -23,3 +23,11 @@ body {
 .navbar .navbar-brand {
   color: var(--body-fg);
 }
+
+form .btn {
+  width: 100%;
+}
+
+form .submit-row a.deletelink {
+  height: 35px;
+}
