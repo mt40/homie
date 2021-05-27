@@ -1,0 +1,24 @@
+.app-btn {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  /*background-image: url(https://c.stocksy.com/a/2ZTB00/z9/2735256.jpg);*/
+  background-size: cover;
+  text-align: left !important;
+  border: none !important;
+  color: black !important;
+}
+
+.app-btn-money {
+  background: linear-gradient(to right, #CAC531, #F3F9A7);
+}
+
+.app-btn-authentication-and-authorization {
+  background: linear-gradient(to right, #1fddff, #ff4b1f);
+}
+
+.app-btn-portfolio {
+  background: linear-gradient(to right, #38ef7d, #11998e);
+}

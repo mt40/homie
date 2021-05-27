@@ -54,3 +54,11 @@ class IntDateTimeField(models.Field):
     def value_to_string(self, obj):
         value = self.value_from_object(obj)
         return str(self.get_prep_value(value))
+
+
+class BaseModel(models.Model):
+    class Meta:
+        abstract = True
+
+    create_time = IntDateTimeField(auto_now_add=True)
+    update_time = IntDateTimeField(auto_now=True)

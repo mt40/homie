@@ -31,3 +31,15 @@ form .btn {
 form .submit-row a.deletelink {
   height: 35px;
 }
+
+form .submit-row a.closelink {
+  height: 35px;
+}
+
+.inline-group .tabular td.original p {
+  overflow: visible;
+}
+
+a.btn.btn-primary {
+  color: white;
+}
