@@ -116,7 +116,7 @@ class WalletAdmin(BaseModelAdmin):
     pass
 
 
-class CategoryInline(admin.TabularInline):
+class IncomeCategoryInline(admin.TabularInline):
     model = money_models.IncomeCategory
     fields = ('name',)
     readonly_fields = ('name',)
@@ -129,7 +129,7 @@ class IncomeGroupAdmin(BaseModelAdmin):
     ordering = ('name',)
     list_display = ('name',)
     search_fields = ('name',)
-    inlines = (CategoryInline,)
+    inlines = (IncomeCategoryInline,)
 
 
 @admin.register(money_models.IncomeCategory, site=homie_admin_site)
@@ -148,6 +148,24 @@ class IncomeAdmin(BaseModelAdmin):
 
     list_display = ('category', 'name', 'value', 'receive_time')
     list_filter = ('wallet', 'category')
+
+
+class ExpenseCategoryInline(IncomeCategoryInline):
+    model = money_models.ExpenseCategory
+
+
+@admin.register(money_models.ExpenseGroup, site=homie_admin_site)
+class ExpenseGroupAdmin(IncomeGroupAdmin):
+    inlines = (ExpenseCategoryInline,)
+
+
+@admin.register(money_models.ExpenseCategory, site=homie_admin_site)
+class ExpenseCategoryAdmin(IncomeCategoryAdmin):
+    pass
+
+@admin.register(money_models.Expense, site=homie_admin_site)
+class ExpenseAdmin(IncomeAdmin):
+    pass
 
 
 
