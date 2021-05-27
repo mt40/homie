@@ -143,10 +143,11 @@ class IncomeCategoryAdmin(BaseModelAdmin):
 
 @admin.register(money_models.Income, site=homie_admin_site)
 class IncomeAdmin(BaseModelAdmin):
-    ordering = ('-receive_time', 'category', 'name')
+    ordering = ('-receive_date', 'category', 'name')
     search_fields = ('category', 'name')
+    date_hierarchy = 'receive_date'
 
-    list_display = ('category', 'name', 'value', 'receive_time')
+    list_display = ('category', 'name', 'value', 'receive_date')
     list_filter = ('wallet', 'category')
 
 
@@ -165,7 +166,9 @@ class ExpenseCategoryAdmin(IncomeCategoryAdmin):
 
 @admin.register(money_models.Expense, site=homie_admin_site)
 class ExpenseAdmin(IncomeAdmin):
-    pass
+    ordering = ('-pay_date', 'category', 'name')
+    list_display = ('category', 'name', 'value', 'pay_date')
+    date_hierarchy = 'pay_date'
 
 
 
