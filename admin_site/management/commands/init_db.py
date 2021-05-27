@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 
 from django.core.management.base import BaseCommand
@@ -85,10 +86,8 @@ class Command(BaseCommand):
                     category=category,
                     name=self.fake.sentence(nb_words=5),
                     value=self.fake.pyint(1000, 1000000),
-                    receive_time=(
-                        time_util.now()
-                            .end_of('month')
-                            .subtract(months=self.fake.pyint(1, 48))
+                    receive_date=(
+                        datetime.date.today() - datetime.timedelta(days=self.fake.pyint(1, 365))
                     ),
                 )
 
@@ -109,5 +108,7 @@ class Command(BaseCommand):
                     category=category,
                     name=self.fake.sentence(nb_words=5),
                     value=self.fake.pyint(1000, 1000000),
-                    receive_time=time_util.now().subtract(days=self.fake.pyint(0, 30)),
+                    pay_date=(
+                        datetime.date.today() - datetime.timedelta(days=self.fake.pyint(1, 365))
+                    ),
                 )

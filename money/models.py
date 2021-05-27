@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 from common.models import IntDateTimeField, BaseModel
@@ -44,7 +46,7 @@ class Income(BaseModel):
     category = models.ForeignKey(IncomeCategory, on_delete=models.PROTECT, blank=False)
     name = models.CharField(max_length=500, blank=True)
     value = models.PositiveIntegerField(blank=False)
-    receive_time = IntDateTimeField(default=time_util.now, auto_now=True)
+    receive_date = models.DateField(default=datetime.date.today)
 
     def __str__(self):
         return f"{self.category}: {self.value}"
@@ -80,7 +82,7 @@ class Expense(BaseModel):
     category = models.ForeignKey(ExpenseCategory, on_delete=models.PROTECT, blank=False)
     name = models.CharField(max_length=500, blank=True)
     value = models.PositiveIntegerField(blank=False)
-    receive_time = IntDateTimeField(default=time_util.now, auto_now=True)
+    pay_date = models.DateField(default=datetime.date.today)
 
     def __str__(self):
         return f"{self.category}: {self.value}"
