@@ -39,3 +39,7 @@ form .submit-row a.closelink {
 .inline-group .tabular td.original p {
   overflow: visible;
 }
+
+a.btn.btn-primary {
+  color: white;
+}
