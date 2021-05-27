@@ -1,0 +1,43 @@
+{% extends "admin/index.html" %}
+{% load static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'admin_site/css/index.css' %}">
+{% endblock %}
+
+{#disable redundant text '<app> Administration'#}
+{% block content_title %}{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+
+{#    index page and app specific index page share this template#}
+{#    so we have to check the current page before rendering our custom index page#}
+    {% if request.resolver_match.url_name != 'index' %}
+      {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    {% else %}
+      {% if app_list %}
+        {% for app in app_list %}
+          <div>
+            <a class="btn btn-primary app-btn app-btn-{{ app.name|slugify }}" role="button" href="{{ app.app_url }}">
+              <!-- icon -->
+              {% if app.name|slugify == 'authentication-and-authorization' %}
+                <i class="bi bi-people"></i>
+              {% elif app.name|slugify == 'money' %}
+                <i class="bi bi-cash-coin"></i>
+              {% elif app.name|slugify == 'portfolio' %}
+                <i class="bi bi-graph-up"></i>
+              {% else %}
+                <i class="bi bi-question-circle"></i>
+              {% endif %}
+
+              <span class="ms-2">{{ app.name }}</span>
+            </a>
+          </div>
+        {% endfor %}
+        <br/>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}
