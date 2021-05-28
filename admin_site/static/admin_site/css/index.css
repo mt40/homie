@@ -11,6 +11,10 @@
   color: black !important;
 }
 
+.app-btn:focus {
+  background: darkslategray !important;
+}
+
 .app-btn-money {
   background: linear-gradient(to right, #CAC531, #F3F9A7);
 }
