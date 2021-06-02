@@ -2,8 +2,7 @@ import datetime
 
 from django.db import models
 
-from common.models import IntDateTimeField, BaseModel
-from portfolio import time_util
+from common.models import BaseModel
 
 
 class Wallet(BaseModel):
@@ -86,3 +85,24 @@ class Expense(BaseModel):
 
     def __str__(self):
         return f"{self.category}: {self.value}"
+
+
+class Budget(BaseModel):
+    class Meta:
+        db_table = "budget_tab"
+
+    expense_group = models.OneToOneField(ExpenseGroup, on_delete=models.PROTECT, blank=False)
+    limit = models.PositiveIntegerField(blank=False)
+
+    def __str__(self):
+        return f"{self.expense_group} budget"
+
+    # testme
+    def get_current_percent(self) -> int:
+        expenses = Expense.objects.filter(
+            category__group=self.expense_group,
+            pay_date__month=datetime.date.today().month
+        )
+        total_value = sum([ex.value for ex in expenses])
+        return int(total_value / self.limit * 100)
+

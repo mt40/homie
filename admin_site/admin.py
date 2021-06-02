@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
+from django.contrib.humanize.templatetags.humanize import intword
 from django.urls import path
+from django.utils.html import format_html
 
 from money import models as money_models
 from portfolio import models as portfolio_models, finance_util, views as portfolio_views
@@ -164,11 +166,42 @@ class ExpenseGroupAdmin(IncomeGroupAdmin):
 class ExpenseCategoryAdmin(IncomeCategoryAdmin):
     pass
 
+
 @admin.register(money_models.Expense, site=homie_admin_site)
 class ExpenseAdmin(IncomeAdmin):
     ordering = ('-pay_date', 'category', 'name')
     list_display = ('category', 'name', 'value', 'pay_date')
     date_hierarchy = 'pay_date'
+
+
+@admin.register(money_models.Budget, site=homie_admin_site)
+class BudgetAdmin(BaseModelAdmin):
+    ordering = ('expense_group', )
+    list_display = ('expense_group', '_budget_limit', '_budget_limit_status')
+
+    readonly_fields = ('_budget_limit_status', )
+    fields = ('id', 'expense_group', 'limit', '_budget_limit_status')
+
+    @admin.display(description='Status')
+    def _budget_limit_status(self, budget: money_models.Budget) -> str:
+        percent = budget.get_current_percent()
+        bg = "bg-danger" if percent >= 100 else ""
+
+        return format_html(
+            f"""
+            <div class="progress">
+              <div class="progress-bar {bg}" role="progressbar" 
+              style="width: {percent}%" 
+              aria-valuenow="{percent}" aria-valuemin="0" aria-valuemax="100">
+              {intword(percent)}%
+              </div>
+            </div>
+            """
+        )
+
+    @admin.display(description='Limit')
+    def _budget_limit(self, budget: money_models.Budget) -> str:
+        return intword(budget.limit)
 
 
 

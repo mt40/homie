@@ -43,3 +43,8 @@ form .submit-row a.closelink {
 a.btn.btn-primary {
   color: white;
 }
+
+/*readonly fields in form won't span the whole width without this*/
+.readonly {
+  width: 100%;
+}

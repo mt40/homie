@@ -4,8 +4,9 @@ from typing import List
 from django.core.management.base import BaseCommand
 from faker import Faker
 
-from money.models import Wallet, IncomeGroup, IncomeCategory, Income, ExpenseGroup, ExpenseCategory, \
-    Expense
+from money.models import Wallet, IncomeGroup, IncomeCategory, Income, ExpenseGroup, \
+    ExpenseCategory, \
+    Expense, Budget
 from portfolio import time_util
 from portfolio.const import TransactionType, DEPOSIT_SYMBOL
 from portfolio.models import Transaction, Holding
@@ -71,6 +72,17 @@ class Command(BaseCommand):
         self._init_money_income(wallets)
         self._init_money_expense(wallets)
 
+        # an overspent budget
+        Budget.objects.create(
+            expense_group=ExpenseGroup.objects.first(),
+            limit=self.fake.pyint(1000, 5000),
+        )
+        # an underspent budget
+        Budget.objects.create(
+            expense_group=ExpenseGroup.objects.last(),
+            limit=20 * 1000 * 1000,
+        )
+
     def _init_money_income(self, wallets: List[Wallet]):
         salary, _ = IncomeGroup.objects.get_or_create(name="Salary")
         bonus, _ = IncomeGroup.objects.get_or_create(name="Bonus")
@@ -102,13 +114,13 @@ class Command(BaseCommand):
         ExpenseCategory.objects.get_or_create(group=beauty, name='Product')
 
         for category in ExpenseCategory.objects.all():
-            for i in range(0, 5):
+            for i in range(0, 15):
                 Expense.objects.get_or_create(
                     wallet=self.fake.random.choice(wallets),
                     category=category,
                     name=self.fake.sentence(nb_words=5),
                     value=self.fake.pyint(1000, 1000000),
                     pay_date=(
-                        datetime.date.today() - datetime.timedelta(days=self.fake.pyint(1, 365))
+                        datetime.date.today() - datetime.timedelta(days=self.fake.pyint(0, 5))
                     ),
                 )
