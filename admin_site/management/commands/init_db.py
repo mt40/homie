@@ -75,7 +75,7 @@ class Command(BaseCommand):
         # an overspent budget
         Budget.objects.create(
             expense_group=ExpenseGroup.objects.first(),
-            limit=self.fake.pyint(1000, 5000),
+            limit=5 * 1000 * 1000,
         )
         # an underspent budget
         Budget.objects.create(
@@ -84,16 +84,16 @@ class Command(BaseCommand):
         )
 
     def _init_money_income(self, wallets: List[Wallet]):
-        salary, _ = IncomeGroup.objects.get_or_create(name="Salary")
-        bonus, _ = IncomeGroup.objects.get_or_create(name="Bonus")
+        salary = IncomeGroup.objects.create(name="Salary")
+        bonus = IncomeGroup.objects.create(name="Bonus")
 
-        IncomeCategory.objects.get_or_create(group=salary, name='Full-time')
-        IncomeCategory.objects.get_or_create(group=salary, name='Part-time')
-        IncomeCategory.objects.get_or_create(group=bonus, name='Tet Bonus')
+        IncomeCategory.objects.create(group=salary, name='Full-time')
+        IncomeCategory.objects.create(group=salary, name='Part-time')
+        IncomeCategory.objects.create(group=bonus, name='Tet Bonus')
 
         for category in IncomeCategory.objects.all():
             for i in range(0, 10):
-                Income.objects.get_or_create(
+                Income.objects.create(
                     wallet=self.fake.random.choice(wallets),
                     category=category,
                     name=self.fake.sentence(nb_words=5),
@@ -104,18 +104,18 @@ class Command(BaseCommand):
                 )
 
     def _init_money_expense(self, wallets: List[Wallet]):
-        food, _ = ExpenseGroup.objects.get_or_create(name="Food")
-        beauty, _ = ExpenseGroup.objects.get_or_create(name="Beauty")
+        food = ExpenseGroup.objects.create(name="Food")
+        beauty = ExpenseGroup.objects.create(name="Beauty")
 
-        ExpenseCategory.objects.get_or_create(group=food, name='Drink')
-        ExpenseCategory.objects.get_or_create(group=food, name='Dinner')
-        ExpenseCategory.objects.get_or_create(group=food, name='Snack')
-        ExpenseCategory.objects.get_or_create(group=beauty, name='Spa')
-        ExpenseCategory.objects.get_or_create(group=beauty, name='Product')
+        ExpenseCategory.objects.create(group=food, name='Drink')
+        ExpenseCategory.objects.create(group=food, name='Dinner')
+        ExpenseCategory.objects.create(group=food, name='Snack')
+        ExpenseCategory.objects.create(group=beauty, name='Spa')
+        ExpenseCategory.objects.create(group=beauty, name='Product')
 
         for category in ExpenseCategory.objects.all():
             for i in range(0, 15):
-                Expense.objects.get_or_create(
+                Expense.objects.create(
                     wallet=self.fake.random.choice(wallets),
                     category=category,
                     name=self.fake.sentence(nb_words=5),
