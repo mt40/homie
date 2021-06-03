@@ -251,14 +251,6 @@ class BudgetAdmin(BaseModelAdmin):
     def _budget_limit(self, budget: money_models.Budget) -> str:
         return intword(budget.limit)
 
-    # todo:
-    #  v- show all days data
-    #  v- hide x/y values except first, today, and last day
-    #  v- dash line for projection
-    #  v- grad bg
-    #  v- limit line
-    #  - animation
-    #  v- different colors for: first to today, today to limit, limit to last day
     @admin.display(description='Projection')
     def _budget_projection(self, budget: money_models.Budget) -> str:
         y_values, today_index = _get_y_values()
