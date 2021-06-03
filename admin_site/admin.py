@@ -1,5 +1,6 @@
 import datetime
 from time import strftime
+from typing import List, Tuple
 
 from django.conf import settings
 from django.contrib import admin
@@ -180,6 +181,55 @@ class ExpenseAdmin(IncomeAdmin):
     date_hierarchy = 'pay_date'
 
 
+def _get_x_labels() -> List[str]:
+    # labels on x axis
+    # we only show important days
+    important_days = (
+        datetime_util.first_date_current_month(),
+        datetime_util.today(),
+        datetime_util.last_date_current_month(),
+    )
+    return [
+        date.strftime('%d/%m') if date in important_days else ''
+        for date in datetime_util.get_date_iterator(
+            datetime_util.first_date_current_month(),
+            datetime_util.last_date_current_month()
+        )
+    ]
+
+
+def _get_y_values() -> Tuple[List[int], int]:
+    """
+    Returns expense for each day of this month and
+    the index of the entry for today.
+    """
+
+    # expense of each day until today
+    expense_til_today = []
+    for date in datetime_util.get_date_iterator(
+        datetime_util.first_date_current_month(),
+        datetime_util.today()
+    ):
+        expense = sum([
+            ex.value
+            for ex in Expense.get_expenses_in(
+                start_date=date, end_date=date
+            )
+        ])
+        expense_til_today.append(expense)
+
+    # expense projection for the remaining days
+    expense_projections = []
+    for date in datetime_util.get_date_iterator(
+        datetime_util.tmr(),
+        datetime_util.last_date_current_month()
+    ):
+        projection = date.day * 1000 * 1000  # todo
+        expense_projections.append(projection)
+
+    return expense_til_today + expense_projections, len(expense_til_today) - 1
+
+
 # testme
 @admin.register(money_models.Budget, site=homie_admin_site)
 class BudgetAdmin(BaseModelAdmin):
@@ -204,59 +254,20 @@ class BudgetAdmin(BaseModelAdmin):
     # todo:
     #  v- show all days data
     #  v- hide x/y values except first, today, and last day
-    #  - dash line for projection
-    #  - grad bg
+    #  v- dash line for projection
+    #  v- grad bg
     #  v- limit line
-    #  - different colors for: first to today, today to limit, limit to last day
+    #  - animation
+    #  v- different colors for: first to today, today to limit, limit to last day
     @admin.display(description='Projection')
     def _budget_projection(self, budget: money_models.Budget) -> str:
-        # labels on x axis
-        # we only show important days
-        important_days = (
-            datetime_util.first_date_current_month(),
-            datetime_util.today(),
-            datetime_util.last_date_current_month(),
-        )
-        # todo: format as
-        dates_of_month = [
-            date.strftime('%d/%m') if date in important_days else ''
-            for date in datetime_util.get_date_iterator(
-                datetime_util.first_date_current_month(),
-                datetime_util.last_date_current_month()
-            )
-        ]
-
-        # expense of each day until today
-        expense_til_today = []
-        for date in datetime_util.get_date_iterator(
-            datetime_util.first_date_current_month(),
-            datetime_util.today()
-        ):
-            expense = sum([
-                ex.value
-                for ex in Expense.get_expenses_in(
-                    start_date=date, end_date=date
-                )
-            ])
-            expense_til_today.append(expense)
-
-        # expense projection for the remaining days
-        expense_projections = []
-        for date in datetime_util.get_date_iterator(
-            datetime_util.tmr(),
-            datetime_util.last_date_current_month()
-        ):
-            projection = date.day * 1000 * 1000  # todo
-            expense_projections.append(projection)
-
-        expenses_of_month = expense_til_today + expense_projections
-
+        y_values, today_index = _get_y_values()
         return get_template('admin/budget_projection.html').render(
             context={
-                'x_labels': dates_of_month,
-                'y_values': expenses_of_month,
+                'x_labels': _get_x_labels(),
+                'y_values': y_values,
                 'budget': budget,
-                'current_day_x_index': len(expense_til_today) - 1,
+                'current_day_x_index': today_index,
                 'prediction': 10 * 1000 * 1000,
             }
         )
