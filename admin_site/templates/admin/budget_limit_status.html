@@ -1,0 +1,15 @@
+{% load humanize %}
+
+{% comment %}
+Args:
+  str percent percentage of the progress bar
+{% endcomment %}
+
+<div class="progress">
+  <div class="progress-bar {% if percent >= 100 %} bg-danger{% endif %}"
+       role="progressbar"
+       style="width: {{ percent }}%"
+       aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">
+    {{ percent|intword }}%
+  </div>
+</div>

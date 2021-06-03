@@ -1,7 +1,9 @@
 import datetime
 
 from django.db import models
+from django.db.models import QuerySet
 
+from common import datetime_util
 from common.models import BaseModel
 
 
@@ -86,6 +88,14 @@ class Expense(BaseModel):
     def __str__(self):
         return f"{self.category}: {self.value}"
 
+    # testme
+    @staticmethod
+    def get_expenses_in(start_date: datetime.date, end_date: datetime.date):
+        return Expense.objects.filter(
+            pay_date__gte=start_date,
+            pay_date__lte=end_date
+        )
+
 
 class Budget(BaseModel):
     class Meta:
@@ -99,10 +109,10 @@ class Budget(BaseModel):
 
     # testme
     def get_current_percent(self) -> int:
-        expenses = Expense.objects.filter(
-            category__group=self.expense_group,
-            pay_date__month=datetime.date.today().month
-        )
+        expenses = Expense.get_expenses_in(
+            start_date=datetime_util.first_date_current_month(),
+            end_date=datetime_util.last_date_current_month(),
+        ).filter(category__group=self.expense_group)
+
         total_value = sum([ex.value for ex in expenses])
         return int(total_value / self.limit * 100)
-

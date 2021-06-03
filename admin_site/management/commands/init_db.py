@@ -75,7 +75,7 @@ class Command(BaseCommand):
         # an overspent budget
         Budget.objects.create(
             expense_group=ExpenseGroup.objects.first(),
-            limit=5 * 1000 * 1000,
+            limit=10 * 1000 * 1000,
         )
         # an underspent budget
         Budget.objects.create(
