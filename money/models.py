@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.db.models import QuerySet
+from django.utils.functional import cached_property
 
 from common import datetime_util
 from common.models import BaseModel
@@ -86,7 +87,7 @@ class Expense(BaseModel):
     pay_date = models.DateField(default=datetime.date.today)
 
     def __str__(self):
-        return f"{self.category}: {self.value}"
+        return str(self.name)
 
     # testme
     @staticmethod
@@ -108,12 +109,12 @@ class Budget(BaseModel):
         return f"{self.expense_group} budget"
 
     # testme
-    @property
+    @cached_property
     def current_percent(self) -> int:
         expenses = Expense.get_expenses_in(
             start_date=datetime_util.first_date_current_month(),
             end_date=datetime_util.last_date_current_month(),
-        ).filter(category__group=self.expense_group)
+        ).filter(category__group=self.expense_group).only('value')
 
         total_value = sum([ex.value for ex in expenses])
         return int(total_value / self.limit * 100)

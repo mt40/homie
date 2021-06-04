@@ -5,6 +5,7 @@ Faker==8.1.0
 pendulum==2.1.2
 pydantic==1.8.2
 django-admin-inline-paginator==0.1.1
+django-debug-toolbar
 
 # google cloud
 google-cloud-secret-manager==2.4.0

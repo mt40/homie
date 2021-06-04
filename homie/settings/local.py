@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'portfolio',
     'money',
     'admin_site',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'homie.urls'
@@ -151,4 +153,19 @@ LOGGING = {
         'handlers': ['console'],
         'level': 'INFO',
     },
+}
+
+
+# for django-debug-toolbar
+# https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#toolbar-options
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+}
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'world_end',
+    }
 }
