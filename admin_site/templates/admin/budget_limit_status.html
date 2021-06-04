@@ -2,14 +2,31 @@
 
 {% comment %}
 Args:
-  str percent percentage of the progress bar
+  Budget budget
+  bool show_label default is False
 {% endcomment %}
 
-<div id="budget-limit-status" class="progress">
-  <div class="progress-bar {% if percent >= 100 %} bg-danger{% endif %}"
-       role="progressbar"
-       style="width: {{ percent }}%"
-       aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">
-    {{ percent|intword }}%
+<a class="color-unset" href="{% url 'homie_admin:money_budget_change' budget.id %}">
+  <div id="budget-limit-status">
+    {% if show_label %}
+      <div class="row">
+        <div class="col-auto">
+          {{ budget.expense_group.name }}
+        </div>
+        <div class="col"></div>
+        <div class="col-auto">
+          {{ budget.limit|intword }}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="progress">
+      <div class="progress-bar {% if budget.current_percent >= 100 %} bg-danger{% endif %}"
+           role="progressbar"
+           style="width: {{ budget.current_percent }}%"
+           aria-valuenow="{{ budget.current_percent }}" aria-valuemin="0" aria-valuemax="100">
+        {{ budget.current_percent|intword }}%
+      </div>
+    </div>
   </div>
-</div>
+</a>

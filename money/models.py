@@ -108,7 +108,8 @@ class Budget(BaseModel):
         return f"{self.expense_group} budget"
 
     # testme
-    def get_current_percent(self) -> int:
+    @property
+    def current_percent(self) -> int:
         expenses = Expense.get_expenses_in(
             start_date=datetime_util.first_date_current_month(),
             end_date=datetime_util.last_date_current_month(),

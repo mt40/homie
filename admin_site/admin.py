@@ -176,6 +176,33 @@ class ExpenseAdmin(IncomeAdmin):
     ordering = ('-pay_date', 'category', 'name')
     list_display = ('category', 'name', 'value', 'pay_date')
     date_hierarchy = 'pay_date'
+    fields = (
+        'id',
+        'wallet',
+        'category',
+        'name',
+        'value',
+        'pay_date',
+        '_budget_limit_status',
+        'create_time',
+        'update_time',
+    )
+
+    @admin.display(description='Budget')
+    def _budget_limit_status(self, expense: money_models.Expense) -> str:
+        budget = expense.category.group.budget
+        return get_template('admin/budget_limit_status.html').render(
+            context={
+                'budget': budget,
+                'show_label': True,
+            }
+        )
+
+    def get_readonly_fields(self, request, obj=None):
+        return (
+            *super().get_readonly_fields(request, obj),
+            '_budget_limit_status',
+        )
 
 
 def _get_x_labels() -> List[str]:
@@ -234,16 +261,27 @@ def _get_y_values() -> Tuple[List[int], int]:
 class BudgetAdmin(BaseModelAdmin):
     ordering = ('expense_group',)
     list_display = ('expense_group', '_budget_limit', '_budget_limit_status')
+    fields = (
+        'id',
+        'expense_group',
+        'limit',
+        '_budget_limit_status',
+        '_budget_projection',
+        'create_time',
+        'update_time',
+    )
 
-    readonly_fields = ('_budget_limit_status', '_budget_projection')
-    fields = ('id', 'expense_group', 'limit', '_budget_limit_status', '_budget_projection')
+    def get_readonly_fields(self, request, obj=None):
+        return (
+            *super().get_readonly_fields(request, obj),
+            '_budget_limit_status',
+            '_budget_projection',
+        )
 
     @admin.display(description='Status')
     def _budget_limit_status(self, budget: money_models.Budget) -> str:
         return get_template('admin/budget_limit_status.html').render(
-            context={
-                'percent': budget.get_current_percent()
-            }
+            context={'budget': budget}
         )
 
     @admin.display(description='Limit')
