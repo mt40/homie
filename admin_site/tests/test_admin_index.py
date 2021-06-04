@@ -6,7 +6,8 @@ from admin_site.const import UrlName
 
 class AdminIndexTests(BaseTestCase):
     def test_calculator_link(self):
-        res = self.client.get(reverse(UrlName.ADMIN_INDEX.value))
+        url = reverse(UrlName.APP_INDEX.value, args=("portfolio",))
+        res = self.client.get(url)
         self.assertContains(
             res,
             text='Calculator'

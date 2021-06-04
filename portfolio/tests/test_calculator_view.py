@@ -27,7 +27,7 @@ class CalculatorViewTests(BaseTestCase):
         res = self.client.get(url)
         for k, v in self.test_result.dict().items():
             self.assertContains(res, text=k)
-            self.assertContains(res, text=v, count=1)
+            self.assertContains(res, text=v)
 
     def test_calculator_view_get(self):
         url = reverse(UrlName.CALCULATOR.value)
