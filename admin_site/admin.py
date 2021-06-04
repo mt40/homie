@@ -1,13 +1,19 @@
+from typing import List, Tuple
+
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
+from django.contrib.humanize.templatetags.humanize import intword
+from django.template.loader import get_template
 from django.urls import path
+from django_admin_inline_paginator.admin import TabularInlinePaginated
 
+from common import datetime_util, ml_util
 from money import models as money_models
+from money.models import Expense
 from portfolio import models as portfolio_models, finance_util, views as portfolio_views
 from portfolio.apps import PortfolioConfig
-from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 
 class HomieAdminSite(admin.AdminSite):
@@ -58,8 +64,8 @@ class BaseModelAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         return (
-           *super().get_readonly_fields(request, obj),
-           'id', 'create_time', 'update_time'
+            *super().get_readonly_fields(request, obj),
+            'id', 'create_time', 'update_time'
         )
 
 
@@ -88,10 +94,10 @@ class TransactionInline(TabularInlinePaginated):
 @admin.register(portfolio_models.Holding, site=homie_admin_site)
 class HoldingAdmin(admin.ModelAdmin):
     list_display = ('symbol', 'amount', 'total_value')
-    ordering = ('symbol', )
+    ordering = ('symbol',)
     fields = ('symbol', 'amount', 'latest_price', 'total_value', 'update_time')
     readonly_fields = ('total_value',)
-    inlines = (TransactionInline, )
+    inlines = (TransactionInline,)
 
     change_list_template = "admin/holding_changelist_template.html"
 
@@ -138,7 +144,7 @@ class IncomeCategoryAdmin(BaseModelAdmin):
     search_fields = ('name',)
 
     list_display = ('group', 'name')
-    list_filter = ('group', )
+    list_filter = ('group',)
 
 
 @admin.register(money_models.Income, site=homie_admin_site)
@@ -164,13 +170,132 @@ class ExpenseGroupAdmin(IncomeGroupAdmin):
 class ExpenseCategoryAdmin(IncomeCategoryAdmin):
     pass
 
+
 @admin.register(money_models.Expense, site=homie_admin_site)
 class ExpenseAdmin(IncomeAdmin):
     ordering = ('-pay_date', 'category', 'name')
     list_display = ('category', 'name', 'value', 'pay_date')
     date_hierarchy = 'pay_date'
+    fields = (
+        'id',
+        'wallet',
+        'category',
+        'name',
+        'value',
+        'pay_date',
+        '_budget_limit_status',
+        'create_time',
+        'update_time',
+    )
+
+    @admin.display(description='Budget')
+    def _budget_limit_status(self, expense: money_models.Expense) -> str:
+        budget = expense.category.group.budget
+        return get_template('admin/budget_limit_status.html').render(
+            context={
+                'budget': budget,
+                'show_label': True,
+            }
+        )
+
+    def get_readonly_fields(self, request, obj=None):
+        return (
+            *super().get_readonly_fields(request, obj),
+            '_budget_limit_status',
+        )
 
 
+def _get_x_labels() -> List[str]:
+    # labels on x axis
+    # we only show important days
+    important_days = (
+        datetime_util.first_date_current_month(),
+        datetime_util.today(),
+        datetime_util.last_date_current_month(),
+    )
+    return [
+        date.strftime('%d/%m') if date in important_days else ''
+        for date in datetime_util.get_date_iterator(
+            datetime_util.first_date_current_month(),
+            datetime_util.last_date_current_month()
+        )
+    ]
 
 
+def _get_current_expenses() -> List[int]:
+    expense_til_today = []
+    for date in datetime_util.get_date_iterator(
+        datetime_util.first_date_current_month(),
+        datetime_util.today()
+    ):
+        expense = sum([
+            ex.value
+            for ex in Expense.get_expenses_in(
+                start_date=date, end_date=date
+            )
+        ])
+        expense_til_today.append(expense)
 
+    return expense_til_today
+
+
+def _get_y_values() -> Tuple[List[int], int]:
+    """
+    Returns expense for each day of this month and
+    the index of the entry for today.
+    """
+
+    current_daily_expenses = _get_current_expenses()
+    expense_projections = ml_util.expense_projection(
+        current_daily_expenses,
+        project_for=range(
+            len(current_daily_expenses) + 1,
+            datetime_util.last_date_current_month().day + 1
+        )
+    )
+
+    return current_daily_expenses + expense_projections, len(current_daily_expenses) - 1
+
+
+@admin.register(money_models.Budget, site=homie_admin_site)
+class BudgetAdmin(BaseModelAdmin):
+    ordering = ('expense_group',)
+    list_display = ('expense_group', '_budget_limit', '_budget_limit_status')
+    fields = (
+        'id',
+        'expense_group',
+        'limit',
+        '_budget_limit_status',
+        '_budget_projection',
+        'create_time',
+        'update_time',
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        return (
+            *super().get_readonly_fields(request, obj),
+            '_budget_limit_status',
+            '_budget_projection',
+        )
+
+    @admin.display(description='Status')
+    def _budget_limit_status(self, budget: money_models.Budget) -> str:
+        return get_template('admin/budget_limit_status.html').render(
+            context={'budget': budget}
+        )
+
+    @admin.display(description='Limit')
+    def _budget_limit(self, budget: money_models.Budget) -> str:
+        return intword(budget.limit)
+
+    @admin.display(description='Projection')
+    def _budget_projection(self, budget: money_models.Budget) -> str:
+        y_values, today_index = _get_y_values()
+        return get_template('admin/budget_projection.html').render(
+            context={
+                'x_labels': _get_x_labels(),
+                'y_values': y_values,
+                'budget': budget,
+                'current_day_x_index': today_index,
+            }
+        )

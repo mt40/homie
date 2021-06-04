@@ -1,0 +1,138 @@
+{% comment %}
+Args:
+  List[str] x_labels
+  List[int] y_values
+  int current_day_x_index
+  Budget budget
+{% endcomment %}
+
+<canvas id="budget-projection-chart" style="height: 300px; width: 100%"></canvas>
+<script>
+  const chartContext = document.getElementById('budget-projection-chart').getContext('2d');
+
+  function get_gradient(element) {
+    // I still don't understand how to define the coordinates here @_@
+    const gradient = element.createLinearGradient(0, 500, 0, 0);
+    gradient.addColorStop(0, 'transparent');
+    gradient.addColorStop(1, accentColorGrayLight);
+    return gradient;
+  }
+
+  /**
+   * Draw projection as dashed line.
+   *
+   * @see https://www.chartjs.org/docs/master/charts/line.html#segment
+   */
+  function get_dash_line_config(context) {
+    if (context.p1.parsed.x > {{ current_day_x_index }}) {
+      // dash line length=5 gap=5
+      // see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash#parameters
+      return [5, 5];
+    }
+    return undefined;
+  }
+
+  /**
+   * Draw over-expenses as red.
+   *
+   * @see https://www.chartjs.org/docs/master/charts/line.html#segment
+   */
+  function get_line_color_config(context) {
+    if (context.p1.parsed.y > {{ budget.limit }}) {
+      return accentColorRed;
+    }
+    return undefined;
+  }
+
+  /**
+   * Draws a point to mark today data. Otherwise, don't draw.
+   *
+   * @see https://www.chartjs.org/docs/latest/general/options.html#scriptable-options
+   */
+  function get_point_radius_config(context) {
+    if (context.dataIndex === {{ current_day_x_index }}) {
+      return 5;
+    }
+    return 0;  // hide
+  }
+
+  function get_expense_dataset(data) {
+    return {
+      label: 'Expense',
+      backgroundColor: get_gradient(chartContext),  // for area under the line
+      borderColor: accentColorBlue,
+      data: data,
+      elements: {
+        line: {
+          cubicInterpolationMode: 'monotone',  // curve line
+        },
+      },
+      segment: {
+        borderDash: get_dash_line_config,
+        borderColor: get_line_color_config,
+      },
+      fill: true,
+      order: 1,  // draw first, so it will be below
+      pointBackgroundColor: accentColorBlue,
+      pointRadius: get_point_radius_config,
+    }
+  }
+
+  function get_limit_dataset(data) {
+    return {
+      label: 'Limit',
+      backgroundColor: accentColorYellow,
+      borderColor: accentColorYellow,
+      data: data,
+      pointRadius: 0,
+    }
+  }
+
+  const xs = [
+    {% for label in x_labels %}'{{ label }}',{% endfor %}
+  ];
+  const ys = [
+    {% for value in y_values %}{{ value }}, {% endfor %}
+  ];
+  const limits = [
+    {% for label in x_labels %}{{ budget.limit }}, {% endfor %}
+  ]
+
+  const datasets = {
+    labels: xs,
+    datasets: [
+      get_expense_dataset(ys),
+      get_limit_dataset(limits),
+    ]
+  };
+
+  new Chart(chartContext, {
+    type: 'line',
+    data: datasets,
+    options: {
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: false  // show all labels
+          },
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            display: false
+          },
+          ticks: {
+            callback: function (value, index, values) {
+              return humanFormat(value);
+            }
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false  // hide legend
+        }
+      }
+    }
+  });
+</script>

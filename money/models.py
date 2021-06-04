@@ -1,9 +1,10 @@
 import datetime
 
 from django.db import models
+from django.db.models import QuerySet
 
-from common.models import IntDateTimeField, BaseModel
-from portfolio import time_util
+from common import datetime_util
+from common.models import BaseModel
 
 
 class Wallet(BaseModel):
@@ -86,3 +87,33 @@ class Expense(BaseModel):
 
     def __str__(self):
         return f"{self.category}: {self.value}"
+
+    # testme
+    @staticmethod
+    def get_expenses_in(start_date: datetime.date, end_date: datetime.date):
+        return Expense.objects.filter(
+            pay_date__gte=start_date,
+            pay_date__lte=end_date
+        )
+
+
+class Budget(BaseModel):
+    class Meta:
+        db_table = "budget_tab"
+
+    expense_group = models.OneToOneField(ExpenseGroup, on_delete=models.PROTECT, blank=False)
+    limit = models.PositiveIntegerField(blank=False)
+
+    def __str__(self):
+        return f"{self.expense_group} budget"
+
+    # testme
+    @property
+    def current_percent(self) -> int:
+        expenses = Expense.get_expenses_in(
+            start_date=datetime_util.first_date_current_month(),
+            end_date=datetime_util.last_date_current_month(),
+        ).filter(category__group=self.expense_group)
+
+        total_value = sum([ex.value for ex in expenses])
+        return int(total_value / self.limit * 100)
