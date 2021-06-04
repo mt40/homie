@@ -1,5 +1,3 @@
-import datetime
-from time import strftime
 from typing import List, Tuple
 
 from django.conf import settings
@@ -9,14 +7,13 @@ from django.contrib.auth.models import User, Group
 from django.contrib.humanize.templatetags.humanize import intword
 from django.template.loader import get_template
 from django.urls import path
-from django.utils.html import format_html
+from django_admin_inline_paginator.admin import TabularInlinePaginated
 
-from common import datetime_util
+from common import datetime_util, ml_util
 from money import models as money_models
 from money.models import Expense
 from portfolio import models as portfolio_models, finance_util, views as portfolio_views
 from portfolio.apps import PortfolioConfig
-from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 
 class HomieAdminSite(admin.AdminSite):
@@ -198,13 +195,7 @@ def _get_x_labels() -> List[str]:
     ]
 
 
-def _get_y_values() -> Tuple[List[int], int]:
-    """
-    Returns expense for each day of this month and
-    the index of the entry for today.
-    """
-
-    # expense of each day until today
+def _get_current_expenses() -> List[int]:
     expense_til_today = []
     for date in datetime_util.get_date_iterator(
         datetime_util.first_date_current_month(),
@@ -218,19 +209,27 @@ def _get_y_values() -> Tuple[List[int], int]:
         ])
         expense_til_today.append(expense)
 
-    # expense projection for the remaining days
-    expense_projections = []
-    for date in datetime_util.get_date_iterator(
-        datetime_util.tmr(),
-        datetime_util.last_date_current_month()
-    ):
-        projection = date.day * 1000 * 1000  # todo
-        expense_projections.append(projection)
-
-    return expense_til_today + expense_projections, len(expense_til_today) - 1
+    return expense_til_today
 
 
-# testme
+def _get_y_values() -> Tuple[List[int], int]:
+    """
+    Returns expense for each day of this month and
+    the index of the entry for today.
+    """
+
+    current_daily_expenses = _get_current_expenses()
+    expense_projections = ml_util.expense_projection(
+        current_daily_expenses,
+        project_for=range(
+            len(current_daily_expenses) + 1,
+            datetime_util.last_date_current_month().day + 1
+        )
+    )
+
+    return current_daily_expenses + expense_projections, len(current_daily_expenses) - 1
+
+
 @admin.register(money_models.Budget, site=homie_admin_site)
 class BudgetAdmin(BaseModelAdmin):
     ordering = ('expense_group',)
@@ -260,6 +259,5 @@ class BudgetAdmin(BaseModelAdmin):
                 'y_values': y_values,
                 'budget': budget,
                 'current_day_x_index': today_index,
-                'prediction': 10 * 1000 * 1000,
             }
         )

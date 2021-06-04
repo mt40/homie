@@ -5,3 +5,4 @@ const accentColorYellow = '#F2CC39';
 const accentColorBrown = '#C2B8AD';
 const accentColorCream = '#FFFCE6';
 const accentColorRed = '#D4667D';
+const accentColorGrayLight = '#7F4B4B26'
