@@ -5,7 +5,7 @@ Args:
   str percent percentage of the progress bar
 {% endcomment %}
 
-<div class="progress">
+<div id="budget-limit-status" class="progress">
   <div class="progress-bar {% if percent >= 100 %} bg-danger{% endif %}"
        role="progressbar"
        style="width: {{ percent }}%"
