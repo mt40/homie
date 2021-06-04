@@ -1,5 +1,6 @@
 from typing import List, Tuple
 
+from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
@@ -20,6 +21,7 @@ class HomieAdminSite(admin.AdminSite):
     site_title = settings.MODE.get_site_title_for('Homie')
     site_header = 'Homie'
     index_title = ''
+    enable_nav_sidebar = False
 
     def get_urls(self):
         """
@@ -119,7 +121,7 @@ class HoldingAdmin(admin.ModelAdmin):
 
 @admin.register(money_models.Wallet, site=homie_admin_site)
 class WalletAdmin(BaseModelAdmin):
-    pass
+    search_fields = ('name', )
 
 
 class IncomeCategoryInline(admin.TabularInline):
@@ -168,7 +170,7 @@ class ExpenseGroupAdmin(IncomeGroupAdmin):
 
 @admin.register(money_models.ExpenseCategory, site=homie_admin_site)
 class ExpenseCategoryAdmin(IncomeCategoryAdmin):
-    pass
+    search_fields = ('name', )
 
 
 @admin.register(money_models.Expense, site=homie_admin_site)
@@ -176,6 +178,7 @@ class ExpenseAdmin(IncomeAdmin):
     ordering = ('-pay_date', 'category', 'name')
     list_display = ('category', 'name', 'value', 'pay_date')
     date_hierarchy = 'pay_date'
+    autocomplete_fields = ('wallet', 'category')
     fields = (
         'id',
         'wallet',
@@ -187,6 +190,7 @@ class ExpenseAdmin(IncomeAdmin):
         'create_time',
         'update_time',
     )
+    list_select_related = True
 
     @admin.display(description='Budget')
     def _budget_limit_status(self, expense: money_models.Expense) -> str:
@@ -261,6 +265,7 @@ def _get_y_values() -> Tuple[List[int], int]:
 class BudgetAdmin(BaseModelAdmin):
     ordering = ('expense_group',)
     list_display = ('expense_group', '_budget_limit', '_budget_limit_status')
+    autocomplete_fields = ('expense_group', )
     fields = (
         'id',
         'expense_group',
