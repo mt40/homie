@@ -12,7 +12,7 @@ from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from common import datetime_util, ml_util
 from money import models as money_models
-from money.models import Expense
+from money.models import Expense, ExpenseGroup
 from portfolio import models as portfolio_models, finance_util, views as portfolio_views
 from portfolio.apps import PortfolioConfig
 
@@ -226,7 +226,7 @@ def _get_x_labels() -> List[str]:
     ]
 
 
-def _get_current_expenses() -> List[int]:
+def _get_current_expenses(group: ExpenseGroup) -> List[int]:
     expense_til_today = []
     for date in datetime_util.get_date_iterator(
         datetime_util.first_date_current_month(),
@@ -236,20 +236,20 @@ def _get_current_expenses() -> List[int]:
             ex.value
             for ex in Expense.get_expenses_in(
                 start_date=date, end_date=date
-            )
+            ).filter(category__group=group)
         ])
         expense_til_today.append(expense)
 
     return expense_til_today
 
 
-def _get_y_values() -> Tuple[List[int], int]:
+def _get_y_values(group: ExpenseGroup) -> Tuple[List[int], int]:
     """
     Returns expense for each day of this month and
     the index of the entry for today.
     """
 
-    current_daily_expenses = _get_current_expenses()
+    current_daily_expenses = _get_current_expenses(group)
     expense_projections = ml_util.expense_projection(
         current_daily_expenses,
         project_for=range(
@@ -295,7 +295,7 @@ class BudgetAdmin(BaseModelAdmin):
 
     @admin.display(description='Projection')
     def _budget_projection(self, budget: money_models.Budget) -> str:
-        y_values, today_index = _get_y_values()
+        y_values, today_index = _get_y_values(budget.expense_group)
         return get_template('admin/budget_projection.html').render(
             context={
                 'x_labels': _get_x_labels(),

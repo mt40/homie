@@ -28,8 +28,9 @@ def expense_projection(current_expenses: List[int], project_for: Iterable[int]) 
 
     """
 
-    def objective(x, a, b, c):
-        return a * sin(x) + b * x ** 1.2 + c
+    def objective(x, a, b, c) -> Iterable:
+        y = a * sin(x) + b * x ** 1.2 + c
+        return [max(_y, 0) for _y in y]  # expense cannot be negative
 
     x_values = np.array(range(1, len(current_expenses) + 1))
     y_values = np.array(current_expenses)
