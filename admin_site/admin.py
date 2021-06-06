@@ -1,3 +1,4 @@
+from functools import reduce
 from typing import List, Tuple
 
 from django import forms
@@ -226,7 +227,12 @@ def _get_x_labels() -> List[str]:
     ]
 
 
-def _get_current_expenses(group: ExpenseGroup) -> List[int]:
+def _get_current_accumulated_expenses(group: ExpenseGroup) -> List[int]:
+    """
+    Returns a list of accumulated expense. The i-th element is the expense
+    from day 1 of this month until day i-th.
+    """
+
     expense_til_today = []
     for date in datetime_util.get_date_iterator(
         datetime_util.first_date_current_month(),
@@ -238,27 +244,31 @@ def _get_current_expenses(group: ExpenseGroup) -> List[int]:
                 start_date=date, end_date=date
             ).filter(category__group=group)
         ])
-        expense_til_today.append(expense)
+        expense_til_today.append(
+            expense
+            if len(expense_til_today) == 0
+            else expense_til_today[-1] + expense
+        )
 
     return expense_til_today
 
 
 def _get_y_values(group: ExpenseGroup) -> Tuple[List[int], int]:
     """
-    Returns expense for each day of this month and
+    Returns accumulated expense for each day of this month and
     the index of the entry for today.
     """
 
-    current_daily_expenses = _get_current_expenses(group)
+    current_daily_acc_expenses = _get_current_accumulated_expenses(group)
     expense_projections = ml_util.expense_projection(
-        current_daily_expenses,
+        current_daily_acc_expenses,
         project_for=range(
-            len(current_daily_expenses) + 1,
+            len(current_daily_acc_expenses) + 1,
             datetime_util.last_date_current_month().day + 1
         )
     )
 
-    return current_daily_expenses + expense_projections, len(current_daily_expenses) - 1
+    return current_daily_acc_expenses + expense_projections, len(current_daily_acc_expenses) - 1
 
 
 @admin.register(money_models.Budget, site=homie_admin_site)

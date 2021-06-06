@@ -96,6 +96,18 @@ class Expense(BaseModel):
             pay_date__lte=end_date
         )
 
+    @staticmethod
+    def get_expense_value_in(
+        start_date: datetime.date, 
+        end_date: datetime.date,
+        group: ExpenseGroup = None,
+    ) -> int:
+        expenses = Expense.get_expenses_in(start_date, end_date)
+        if group is not None:
+            expenses = expenses.filter(category__group=group)
+
+        return sum([ex.value for ex in expenses])
+
 
 class Budget(BaseModel):
     class Meta:
