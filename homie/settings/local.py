@@ -35,8 +35,7 @@ ALLOWED_HOSTS = [
 
 
 # Application definition
-
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,14 +43,28 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+]
+
+MY_APPS = [
     'django_admin_inline_paginator',
     'portfolio',
     'money',
     'admin_site',
+]
+
+DEBUG_APPS = [
     'debug_toolbar',
 ]
 
-MIDDLEWARE = [
+INSTALLED_APPS = [
+    *DJANGO_APPS,
+    *MY_APPS,
+    *DEBUG_APPS,
+]
+
+# Middleware definition
+
+DJANGO_MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,7 +72,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+DEBUG_MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+MIDDLEWARE = [
+    *DJANGO_MIDDLEWARE,
+    *DEBUG_MIDDLEWARE,
 ]
 
 ROOT_URLCONF = 'homie.urls'

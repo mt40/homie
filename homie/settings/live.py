@@ -23,6 +23,15 @@ ALLOWED_HOSTS = [
     "minhthai.me",
 ]
 
+INSTALLED_APPS = [
+    *DJANGO_APPS,
+    *MY_APPS,
+]
+
+MIDDLEWARE = [
+    *DJANGO_MIDDLEWARE,
+]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -68,9 +77,3 @@ try:
     }
 except DefaultCredentialsError as error:
     print(str(error))
-
-
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda _: False,
-}
-
