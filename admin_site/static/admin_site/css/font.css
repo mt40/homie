@@ -33,6 +33,7 @@ div.breadcrumbs a {
     font-weight: normal;
 }
 
-body {
+* {
     font-family: "Lexend", "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+    font-size: 16px !important;
 }
