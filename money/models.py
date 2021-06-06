@@ -1,9 +1,11 @@
 import datetime
 
 from django.db import models
+from django.db.models import QuerySet
+from django.utils.functional import cached_property
 
-from common.models import IntDateTimeField, BaseModel
-from portfolio import time_util
+from common import datetime_util
+from common.models import BaseModel
 
 
 class Wallet(BaseModel):
@@ -85,4 +87,44 @@ class Expense(BaseModel):
     pay_date = models.DateField(default=datetime.date.today)
 
     def __str__(self):
-        return f"{self.category}: {self.value}"
+        return str(self.name)
+
+    @staticmethod
+    def get_expenses_in(start_date: datetime.date, end_date: datetime.date) -> QuerySet:
+        return Expense.objects.filter(
+            pay_date__gte=start_date,
+            pay_date__lte=end_date
+        )
+
+    @staticmethod
+    def get_expense_value_in(
+        start_date: datetime.date, 
+        end_date: datetime.date,
+        group: ExpenseGroup = None,
+    ) -> int:
+        expenses = Expense.get_expenses_in(start_date, end_date)
+        if group is not None:
+            expenses = expenses.filter(category__group=group)
+
+        return sum([ex.value for ex in expenses])
+
+
+class Budget(BaseModel):
+    class Meta:
+        db_table = "budget_tab"
+
+    expense_group = models.OneToOneField(ExpenseGroup, on_delete=models.PROTECT, blank=False)
+    limit = models.PositiveIntegerField(blank=False)
+
+    def __str__(self):
+        return f"{self.expense_group} budget"
+
+    @cached_property
+    def current_percent(self) -> int:
+        expenses = Expense.get_expenses_in(
+            start_date=datetime_util.first_date_current_month(),
+            end_date=datetime_util.last_date_current_month(),
+        ).filter(category__group=self.expense_group).only('value')
+
+        total_value = sum([ex.value for ex in expenses])
+        return int(total_value / self.limit * 100)

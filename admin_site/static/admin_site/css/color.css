@@ -52,3 +52,7 @@ div.breadcrumbs a {
 .submit-row a.deletelink {
   background-color: var(--accent-color-red) !important;
 }
+
+.color-unset {
+  color: unset !important;
+}

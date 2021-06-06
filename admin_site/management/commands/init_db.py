@@ -4,8 +4,9 @@ from typing import List
 from django.core.management.base import BaseCommand
 from faker import Faker
 
-from money.models import Wallet, IncomeGroup, IncomeCategory, Income, ExpenseGroup, ExpenseCategory, \
-    Expense
+from money.models import Wallet, IncomeGroup, IncomeCategory, Income, ExpenseGroup, \
+    ExpenseCategory, \
+    Expense, Budget
 from portfolio import time_util
 from portfolio.const import TransactionType, DEPOSIT_SYMBOL
 from portfolio.models import Transaction, Holding
@@ -71,17 +72,28 @@ class Command(BaseCommand):
         self._init_money_income(wallets)
         self._init_money_expense(wallets)
 
-    def _init_money_income(self, wallets: List[Wallet]):
-        salary, _ = IncomeGroup.objects.get_or_create(name="Salary")
-        bonus, _ = IncomeGroup.objects.get_or_create(name="Bonus")
+        # an overspent budget
+        Budget.objects.create(
+            expense_group=ExpenseGroup.objects.first(),
+            limit=10 * 1000 * 1000,
+        )
+        # an underspent budget
+        Budget.objects.create(
+            expense_group=ExpenseGroup.objects.last(),
+            limit=20 * 1000 * 1000,
+        )
 
-        IncomeCategory.objects.get_or_create(group=salary, name='Full-time')
-        IncomeCategory.objects.get_or_create(group=salary, name='Part-time')
-        IncomeCategory.objects.get_or_create(group=bonus, name='Tet Bonus')
+    def _init_money_income(self, wallets: List[Wallet]):
+        salary = IncomeGroup.objects.create(name="Salary")
+        bonus = IncomeGroup.objects.create(name="Bonus")
+
+        IncomeCategory.objects.create(group=salary, name='Full-time')
+        IncomeCategory.objects.create(group=salary, name='Part-time')
+        IncomeCategory.objects.create(group=bonus, name='Tet Bonus')
 
         for category in IncomeCategory.objects.all():
             for i in range(0, 10):
-                Income.objects.get_or_create(
+                Income.objects.create(
                     wallet=self.fake.random.choice(wallets),
                     category=category,
                     name=self.fake.sentence(nb_words=5),
@@ -92,23 +104,23 @@ class Command(BaseCommand):
                 )
 
     def _init_money_expense(self, wallets: List[Wallet]):
-        food, _ = ExpenseGroup.objects.get_or_create(name="Food")
-        beauty, _ = ExpenseGroup.objects.get_or_create(name="Beauty")
+        food = ExpenseGroup.objects.create(name="Food")
+        beauty = ExpenseGroup.objects.create(name="Beauty")
 
-        ExpenseCategory.objects.get_or_create(group=food, name='Drink')
-        ExpenseCategory.objects.get_or_create(group=food, name='Dinner')
-        ExpenseCategory.objects.get_or_create(group=food, name='Snack')
-        ExpenseCategory.objects.get_or_create(group=beauty, name='Spa')
-        ExpenseCategory.objects.get_or_create(group=beauty, name='Product')
+        ExpenseCategory.objects.create(group=food, name='Drink')
+        ExpenseCategory.objects.create(group=food, name='Dinner')
+        ExpenseCategory.objects.create(group=food, name='Snack')
+        ExpenseCategory.objects.create(group=beauty, name='Spa')
+        ExpenseCategory.objects.create(group=beauty, name='Product')
 
         for category in ExpenseCategory.objects.all():
-            for i in range(0, 5):
-                Expense.objects.get_or_create(
+            for i in range(0, 15):
+                Expense.objects.create(
                     wallet=self.fake.random.choice(wallets),
                     category=category,
                     name=self.fake.sentence(nb_words=5),
                     value=self.fake.pyint(1000, 1000000),
                     pay_date=(
-                        datetime.date.today() - datetime.timedelta(days=self.fake.pyint(1, 365))
+                        datetime.date.today() - datetime.timedelta(days=self.fake.pyint(0, 5))
                     ),
                 )

@@ -23,6 +23,15 @@ ALLOWED_HOSTS = [
     "minhthai.me",
 ]
 
+INSTALLED_APPS = [
+    *DJANGO_APPS,
+    *MY_APPS,
+]
+
+MIDDLEWARE = [
+    *DJANGO_MIDDLEWARE,
+]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
