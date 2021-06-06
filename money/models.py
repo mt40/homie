@@ -89,9 +89,8 @@ class Expense(BaseModel):
     def __str__(self):
         return str(self.name)
 
-    # testme
     @staticmethod
-    def get_expenses_in(start_date: datetime.date, end_date: datetime.date):
+    def get_expenses_in(start_date: datetime.date, end_date: datetime.date) -> QuerySet:
         return Expense.objects.filter(
             pay_date__gte=start_date,
             pay_date__lte=end_date
@@ -108,7 +107,6 @@ class Budget(BaseModel):
     def __str__(self):
         return f"{self.expense_group} budget"
 
-    # testme
     @cached_property
     def current_percent(self) -> int:
         expenses = Expense.get_expenses_in(

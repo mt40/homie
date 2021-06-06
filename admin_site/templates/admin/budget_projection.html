@@ -36,9 +36,12 @@ Args:
    * Draw over-expenses as red.
    *
    * @see https://www.chartjs.org/docs/master/charts/line.html#segment
+   * @see https://www.chartjs.org/docs/master/api/interfaces/pointelement.html
    */
   function get_line_color_config(context) {
-    if (context.p1.parsed.y > {{ budget.limit }}) {
+    is_overlimit = context.p0.parsed.y >= {{ budget.limit }};
+    is_projection = context.p0.parsed.x > {{ current_day_x_index }};
+    if (is_overlimit && is_projection) {
       return accentColorRed;
     }
     return undefined;
