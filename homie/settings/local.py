@@ -159,7 +159,7 @@ LOGGING = {
 # for django-debug-toolbar
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#toolbar-options
 DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+    'SHOW_TOOLBAR_CALLBACK': lambda request: MODE == Mode.LOCAL,
 }
 
 
