@@ -64,3 +64,8 @@ try:
     }
 except DefaultCredentialsError as error:
     print(str(error))
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda _: False,
+}
