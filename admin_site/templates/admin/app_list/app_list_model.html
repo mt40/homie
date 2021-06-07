@@ -3,15 +3,15 @@
 <div class="d-flex align-items-center border border-gray rounded px-3 my-2 model-btn">
     <span class="flex-grow-1">
       <a href="{{ model.admin_url }}" class="d-block py-2 text-dark">
-        <b>{{ model.name }}</b>  <i class="bi bi-box-arrow-up-right ms-1"></i>
+        <b>{{ model.name }}</b> <i class="bi bi-box-arrow-up-right ms-1"></i>
       </a>
     </span>
 
   {% if model.add_url %}
     <span class="ps-1">
-          <a href="{{ model.add_url }}" class="btn btn-primary rounded-pill fs-7">
-            <i class="bi bi-plus-lg"></i> {% translate 'Add' %}
-          </a>
-        </span>
+      <a href="{{ model.add_url }}" class="btn btn-primary rounded-pill fs-7">
+        <i class="bi bi-plus-lg"></i> {% translate 'Add' %}
+      </a>
+    </span>
   {% endif %}
 </div>

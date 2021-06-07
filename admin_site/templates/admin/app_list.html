@@ -3,11 +3,11 @@
 {% if app_list %}
   {% for app in app_list %}
     {% if app.app_label == 'portfolio' %}
-      {% include 'admin/portfolio_app_list.html' %}
+      {% include 'admin/app_list/portfolio_app_list.html' %}
     {% elif app.app_label == 'money' %}
-      {% include 'admin/money_app_list.html' %}
+      {% include 'admin/app_list/money_app_list.html' %}
     {% else %}
-      {% include 'admin/custom_app_list.html' %}
+      {% include 'admin/app_list/custom_app_list.html' %}
     {% endif %}
   {% endfor %}
 {% else %}

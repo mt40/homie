@@ -3,7 +3,7 @@
 <!-- pinned models -->
 {% for model in app.models %}
   {% if model.object_name in pinned_models %}
-    {% include 'admin/app_list_model.html' %}
+    {% include 'admin/app_list/app_list_model.html' %}
   {% endif %}
 {% endfor %}
 
@@ -11,6 +11,6 @@
 
 {% for model in app.models %}
   {% if model.object_name not in pinned_models %}
-    {% include 'admin/app_list_model.html' %}
+    {% include 'admin/app_list/app_list_model.html' %}
   {% endif %}
 {% endfor %}
