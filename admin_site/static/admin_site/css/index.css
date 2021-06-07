@@ -15,14 +15,23 @@
   background: darkslategray !important;
 }
 
+/* Get the gradients here https://uigradients.com/ */
 .app-btn-money {
   background: linear-gradient(to right, #CAC531, #F3F9A7);
 }
 
-.app-btn-authentication-and-authorization {
+.app-btn-auth {
   background: linear-gradient(to right, #1fddff, #ff4b1f);
+}
+
+.app-btn-admin {
+  background: linear-gradient(to right, #40e0d0, #ff8c00, #ff0080);
 }
 
 .app-btn-portfolio {
   background: linear-gradient(to right, #38ef7d, #11998e);
+}
+
+.model-btn {
+  min-height: 4rem;
 }

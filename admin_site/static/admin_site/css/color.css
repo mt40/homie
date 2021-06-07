@@ -56,3 +56,7 @@ div.breadcrumbs a {
 .color-unset {
   color: unset !important;
 }
+
+.border-gray {
+  border-color: var(--accent-color-gray) !important;
+}

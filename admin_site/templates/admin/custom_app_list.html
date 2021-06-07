@@ -1,0 +1,5 @@
+{% load i18n %}
+
+{% for model in app.models %}
+  {% include 'admin/app_list_model.html' %}
+{% endfor %}

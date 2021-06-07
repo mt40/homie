@@ -20,13 +20,15 @@
       {% if app_list %}
         {% for app in app_list %}
           <div>
-            <a class="btn btn-primary app-btn app-btn-{{ app.name|slugify }}" role="button" href="{{ app.app_url }}">
+            <a class="btn btn-primary app-btn app-btn-{{ app.app_label }}" role="button" href="{{ app.app_url }}">
               <!-- icon -->
-              {% if app.name|slugify == 'authentication-and-authorization' %}
+              {% if app.app_label == 'auth' %}
                 <i class="bi bi-people"></i>
-              {% elif app.name|slugify == 'money' %}
+              {% elif app.app_label == 'admin' %}
+                <i class="bi bi-eye"></i>
+              {% elif app.app_label == 'money' %}
                 <i class="bi bi-cash-coin"></i>
-              {% elif app.name|slugify == 'portfolio' %}
+              {% elif app.app_label == 'portfolio' %}
                 <i class="bi bi-graph-up"></i>
               {% else %}
                 <i class="bi bi-question-circle"></i>
@@ -41,3 +43,6 @@
     {% endif %}
   </div>
 {% endblock %}
+
+{#disable 'Recent actions' sidebar#}
+{% block sidebar %}{% endblock %}
