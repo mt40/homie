@@ -60,3 +60,7 @@ div.breadcrumbs a {
 .border-gray {
   border-color: var(--accent-color-gray) !important;
 }
+
+.text-fg {
+  color: var(--body-fg) !important;
+}
