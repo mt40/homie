@@ -106,6 +106,7 @@ class TransactionInline(TabularInlinePaginated):
     fields = ('price', 'fee', 'subtotal', 'transaction_time')
     readonly_fields = ('subtotal',)
     per_page = 10
+    show_change_link = True
 
 
 @admin.register(portfolio_models.Holding, site=homie_admin_site)
@@ -116,8 +117,6 @@ class HoldingAdmin(admin.ModelAdmin):
     readonly_fields = ('total_value',)
     inlines = (TransactionInline,)
 
-    change_list_template = "admin/holding_changelist_template.html"
-
     def has_add_permission(self, request):
         return False
 
@@ -127,12 +126,8 @@ class HoldingAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
-    # todo: no need
-    def changelist_view(self, request, extra_context=None):
-        return super().changelist_view(request, extra_context={
-            **(extra_context or {}),
-            'net_worth': finance_util.get_net_worth()
-        })
+    def get_queryset(self, request):
+        return super().get_queryset(request).filter(amount__gt=0)
 
 
 @admin.register(money_models.Wallet, site=homie_admin_site)
