@@ -1,8 +1,0 @@
-{% extends "admin/change_list.html" %}
-{% load humanize %}
-
-{% block content %}
-  <p><b>Net worth: {{ net_worth | intword }}</b></p>
-
-  {{ block.super }}
-{% endblock %}
