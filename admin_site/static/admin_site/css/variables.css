@@ -6,6 +6,9 @@
   --accent-color-brown: #C2B8AD;
   --accent-color-cream: #FFFCE6;
   --accent-color-red: #D4667D;
+  /* override Django variables */
+  --body-bg: black;
+  --bs-font-sans-serif: "Lexend", "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;;
 }
 
 @media (prefers-color-scheme: dark) {

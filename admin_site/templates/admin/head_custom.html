@@ -9,9 +9,6 @@
       href="{% static 'admin_site/images/favicon-256x256.png' %}"
       type="image/x-icon">
 
-<!-- icon for ios home screen shortcut -->
-<link rel="apple-touch-icon" href="{% static 'admin_site/images/apple-touch-icon.png' %}">
-
 <!-- fonts -->
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link
@@ -46,3 +43,17 @@
 <!-- 3rd party js -->
 <!-- https://www.npmjs.com/package/human-format -->
 <script src="https://cdn.jsdelivr.net/npm/human-format@0.11.0/index.js"></script>
+
+<!-- PWA -->
+<link rel="manifest" href="{% static 'admin_site/homie.webmanifest' %}">
+<link rel="apple-touch-icon" href="{% static 'admin_site/images/apple-touch-icon.png' %}">
+<meta name="apple-mobile-web-app-status-bar-style" content="light-content">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register("{% static 'admin_site/js/service_worker.js' %}").then(function (reg) {
+        console.log('Registered Service Worker for Alloy');
+      });
+    });
+  }
+</script>

@@ -34,7 +34,15 @@ div.breadcrumbs a {
 }
 
 html {
-    font-family: "Lexend", "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+    font-size: 18px;
+}
+
+.form-row, .form-row input[type=text], li, dt, dd {
+    font-size: 1rem !important;
+}
+
+td, th {
+    font-size: 0.8rem !important;
 }
 
 /* allow for even smaller font size than bootstrap supported */
