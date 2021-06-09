@@ -12,8 +12,8 @@
 {% block content %}
   <div id="content-main">
 
-{#    index page and app specific index page share this template#}
-{#    so we have to check the current page before rendering our custom index page#}
+    {#    index page and app specific index page share this template#}
+    {#    so we have to check the current page before rendering our custom index page#}
     {% if request.resolver_match.url_name != 'index' %}
       {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
     {% else %}
@@ -26,7 +26,8 @@
       {% if app_list %}
         {% for app in app_list %}
           <div>
-            <a class="btn btn-primary app-btn app-btn-{{ app.app_label }}" role="button" href="{{ app.app_url }}">
+            <a class="btn btn-primary app-btn app-btn-{{ app.app_label }} ios-focus-dark" role="button"
+               href="{{ app.app_url }}">
               <!-- icon -->
               {% if app.app_label == 'auth' %}
                 <i class="bi bi-people"></i>

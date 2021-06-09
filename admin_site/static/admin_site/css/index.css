@@ -11,8 +11,13 @@
   color: black !important;
 }
 
+/*btn click stype*/
 .app-btn:focus {
   background: darkslategray !important;
+}
+/*special hack to for ios*/
+.ios-focus-dark {
+  -webkit-tap-highlight-color: darkslategray !important;
 }
 
 /* Get the gradients here https://uigradients.com/ */
