@@ -1,51 +1,58 @@
 @media (max-width: 1024px) {
-    /*page header title*/
-    #branding h1 {
-        font-size: 40px !important;
-    }
+  /*page header title*/
+  #branding h1 {
+    font-size: 40px !important;
+  }
 
-    #user-tools {
-        text-align: center !important;
-    }
+  #user-tools {
+    text-align: center !important;
+  }
 }
 
 /*index page title*/
 #branding h1, #branding h1 a:link, #branding h1 a:visited, .site_name {
-    font-family: 'Crimson Pro', serif;
-    font-weight: bold;
+  font-family: 'Crimson Pro', serif;
+  font-weight: bold;
 }
 
 /*module title*/
 .module caption a.section:link, a.section:visited {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /*filter group title*/
 .module h2, .module caption, .inline-group h2 {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 div.breadcrumbs {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 div.breadcrumbs a {
-    font-weight: normal;
+  font-weight: normal;
 }
 
 html {
-    font-size: 18px;
+  font-size: 18px;
 }
 
-.form-row, .form-row input[type=text], li, dt, dd, .form-row textarea, .form-row select {
-    font-size: 1rem !important;
+li, dt, dd,
+.form-row, .form-row textarea, .form-row select,
+.form-row input[type=text],
+.form-row input[type=password],
+.form-row input[type=email],
+.form-row input[type=url],
+.form-row input[type=tel],
+.form-row input[type=number] {
+  font-size: 1rem !important;
 }
 
 td, th {
-    font-size: 0.8rem !important;
+  font-size: 1rem !important;
 }
 
 /* allow for even smaller font size than bootstrap supported */
 .fs-7 {
-    font-size: 0.8rem !important;
+  font-size: 0.8rem !important;
 }
