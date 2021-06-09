@@ -1,5 +1,5 @@
 {% extends "admin/index.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block extrastyle %}
   {{ block.super }}
@@ -17,6 +17,12 @@
     {% if request.resolver_match.url_name != 'index' %}
       {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
     {% else %}
+      <!-- welcome message -->
+      <div class="welcome-msg pb-3">
+        {% translate 'Welcome,' %}
+        <strong>{% firstof user.get_short_name user.get_username %}</strong>
+      </div>
+
       {% if app_list %}
         {% for app in app_list %}
           <div>
