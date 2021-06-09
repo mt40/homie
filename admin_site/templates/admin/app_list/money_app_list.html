@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<!-- pinned models -->
+{% for model in app.models %}
+  {% if model.object_name in pinned_models %}
+    {% include 'admin/app_list/app_list_model.html' %}
+  {% endif %}
+{% endfor %}
+
+<hr/>
+
+{% for model in app.models %}
+  {% if model.object_name not in pinned_models %}
+    {% include 'admin/app_list/app_list_model.html' %}
+  {% endif %}
+{% endfor %}

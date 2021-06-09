@@ -45,7 +45,55 @@ class ModelHoldingTests(TestCase):
             amount=1,
         )
 
-        expect = 5 * 3 + 5 * 1  # latest price is 5
+        expect = 10 * 3 + 5 * 1
         rs = Holding.get_fund()
 
         self.assertEqual(expect, rs)
+
+    def test_recalculate(self):
+        Transaction.objects.create(
+            symbol=const.DEPOSIT_SYMBOL,
+            price=20,
+            amount=1,
+        )
+        Transaction.objects.create(
+            symbol='aaa',
+            price=10,
+            amount=3,
+        )
+        Transaction.objects.create(
+            symbol='aaa',
+            price=5,
+            amount=1,
+        )
+
+        expect = 5 * 3 + 5 * 1  # latest price is 5
+        rs = Holding.objects.get(symbol='aaa').total_value
+
+        self.assertEqual(expect, rs)
+
+    def test_holding_fund(self):
+        Transaction.objects.create(
+            symbol=const.DEPOSIT_SYMBOL,
+            price=100,
+            amount=1,
+        )
+        holding = Holding.objects.get(symbol=const.DEPOSIT_SYMBOL)
+        self.assertEqual(100, holding.total_value)
+
+        Transaction.objects.create(
+            symbol='aaa',
+            price=10,
+            amount=1,
+        )
+        holding.refresh_from_db()
+        self.assertEqual(90, holding.total_value)
+
+        Transaction.objects.create(
+            symbol='aaa',
+            price=1,
+            amount=1,
+            type=TransactionType.SELL,
+        )
+        holding.refresh_from_db()
+        self.assertEqual(91, holding.total_value)

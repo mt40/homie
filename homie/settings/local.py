@@ -155,6 +155,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    BASE_DIR / "admin_site/static",
+    BASE_DIR / "portfolio/static",
+)
 
 DEFAULT_ADMIN_USERNAME='root'
 DEFAULT_ADMIN_PASSWORD='123'

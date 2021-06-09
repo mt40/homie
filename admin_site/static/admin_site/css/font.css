@@ -1,39 +1,58 @@
 @media (max-width: 1024px) {
-    /*page header title*/
-    #branding h1 {
-        font-size: 40px !important;
-    }
+  /*page header title*/
+  #branding h1 {
+    font-size: 40px !important;
+  }
 
-    #user-tools {
-        text-align: center !important;
-    }
+  #user-tools {
+    text-align: center !important;
+  }
 }
 
 /*index page title*/
-#branding h1, #branding h1 a:link, #branding h1 a:visited {
-    font-family: 'Crimson Pro', serif;
-    font-weight: bold;
+#branding h1, #branding h1 a:link, #branding h1 a:visited, .site_name {
+  font-family: 'Crimson Pro', serif;
+  font-weight: bold;
 }
 
 /*module title*/
 .module caption a.section:link, a.section:visited {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 /*filter group title*/
 .module h2, .module caption, .inline-group h2 {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 div.breadcrumbs {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 div.breadcrumbs a {
-    font-weight: normal;
+  font-weight: normal;
 }
 
-* {
-    font-family: "Lexend", "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
-    font-size: 16px !important;
+html {
+  font-size: 18px;
+}
+
+li, dt, dd,
+.form-row, .form-row textarea, .form-row select,
+.form-row input[type=text],
+.form-row input[type=password],
+.form-row input[type=email],
+.form-row input[type=url],
+.form-row input[type=tel],
+.form-row input[type=number] {
+  font-size: 1rem !important;
+}
+
+td, th {
+  font-size: 1rem !important;
+}
+
+/* allow for even smaller font size than bootstrap supported */
+.fs-7 {
+  font-size: 0.8rem !important;
 }

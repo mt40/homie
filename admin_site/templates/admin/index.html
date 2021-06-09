@@ -1,5 +1,5 @@
 {% extends "admin/index.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block extrastyle %}
   {{ block.super }}
@@ -12,21 +12,30 @@
 {% block content %}
   <div id="content-main">
 
-{#    index page and app specific index page share this template#}
-{#    so we have to check the current page before rendering our custom index page#}
+    {#    index page and app specific index page share this template#}
+    {#    so we have to check the current page before rendering our custom index page#}
     {% if request.resolver_match.url_name != 'index' %}
       {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
     {% else %}
+      <!-- welcome message -->
+      <div class="welcome-msg pb-3">
+        {% translate 'Welcome,' %}
+        <strong>{% firstof user.get_short_name user.get_username %}</strong>
+      </div>
+
       {% if app_list %}
         {% for app in app_list %}
           <div>
-            <a class="btn btn-primary app-btn app-btn-{{ app.name|slugify }}" role="button" href="{{ app.app_url }}">
+            <a class="btn btn-primary app-btn app-btn-{{ app.app_label }} ios-focus-dark" role="button"
+               href="{{ app.app_url }}">
               <!-- icon -->
-              {% if app.name|slugify == 'authentication-and-authorization' %}
+              {% if app.app_label == 'auth' %}
                 <i class="bi bi-people"></i>
-              {% elif app.name|slugify == 'money' %}
+              {% elif app.app_label == 'admin' %}
+                <i class="bi bi-eye"></i>
+              {% elif app.app_label == 'money' %}
                 <i class="bi bi-cash-coin"></i>
-              {% elif app.name|slugify == 'portfolio' %}
+              {% elif app.app_label == 'portfolio' %}
                 <i class="bi bi-graph-up"></i>
               {% else %}
                 <i class="bi bi-question-circle"></i>
@@ -41,3 +50,6 @@
     {% endif %}
   </div>
 {% endblock %}
+
+{#disable 'Recent actions' sidebar#}
+{% block sidebar %}{% endblock %}

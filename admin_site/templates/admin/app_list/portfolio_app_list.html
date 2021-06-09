@@ -1,0 +1,18 @@
+{% load i18n humanize %}
+
+<p><b>Net worth: {{ net_worth|intword }}</b></p>
+
+<hr/>
+
+{% include 'admin/app_list/custom_app_list.html' %}
+
+<hr/>
+
+<!-- calculator -->
+<div class="d-flex align-items-center border border-gray rounded px-3 my-2 model-btn">
+  <span class="flex-grow-1">
+    <a href="{% url 'homie_admin:calculator' %}" class="d-block py-2 text-fg">
+      <b>Calculator</b> <i class="bi bi-box-arrow-up-right ms-1"></i>
+    </a>
+  </span>
+</div>

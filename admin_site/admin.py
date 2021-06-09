@@ -4,6 +4,7 @@ from typing import List, Tuple
 from django import forms
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 from django.contrib.humanize.templatetags.humanize import intword
@@ -13,7 +14,7 @@ from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from common import datetime_util, ml_util
 from money import models as money_models
-from money.models import Expense, ExpenseGroup
+from money.models import Expense, ExpenseGroup, Budget, Income
 from portfolio import models as portfolio_models, finance_util, views as portfolio_views
 from portfolio.apps import PortfolioConfig
 
@@ -52,10 +53,23 @@ class HomieAdminSite(admin.AdminSite):
         ]
         return extra_urls + super().get_urls()
 
+    def app_index(self, request, app_label, extra_context=None):
+        return super().app_index(request, app_label, extra_context={
+            'net_worth': finance_util.get_net_worth(),
+            'pinned_models': [
+                model_cls._meta.object_name
+                for model_cls in (Budget, Expense, Income)
+            ]
+        })
+
 
 homie_admin_site = HomieAdminSite(name='homie_admin')
 homie_admin_site.register(User, UserAdmin)
 homie_admin_site.register(Group, GroupAdmin)
+
+@admin.register(LogEntry, site=homie_admin_site)
+class LogEntryAdmin(admin.ModelAdmin):
+    pass
 
 
 class BaseModelAdmin(admin.ModelAdmin):
@@ -92,6 +106,7 @@ class TransactionInline(TabularInlinePaginated):
     fields = ('price', 'fee', 'subtotal', 'transaction_time')
     readonly_fields = ('subtotal',)
     per_page = 10
+    show_change_link = True
 
 
 @admin.register(portfolio_models.Holding, site=homie_admin_site)
@@ -102,8 +117,6 @@ class HoldingAdmin(admin.ModelAdmin):
     readonly_fields = ('total_value',)
     inlines = (TransactionInline,)
 
-    change_list_template = "admin/holding_changelist_template.html"
-
     def has_add_permission(self, request):
         return False
 
@@ -113,11 +126,8 @@ class HoldingAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
-    def changelist_view(self, request, extra_context=None):
-        return super().changelist_view(request, extra_context={
-            **(extra_context or {}),
-            'net_worth': finance_util.get_net_worth()
-        })
+    def get_queryset(self, request):
+        return super().get_queryset(request).filter(amount__gt=0)
 
 
 @admin.register(money_models.Wallet, site=homie_admin_site)

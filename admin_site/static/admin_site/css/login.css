@@ -1,0 +1,12 @@
+html {
+  background-image: url("https://picsum.photos/1080/1920");
+  background-size: cover;
+}
+
+body {
+  background-color: transparent;
+}
+
+.login {
+  background-color: transparent;
+}

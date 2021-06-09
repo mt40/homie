@@ -44,3 +44,13 @@ docker-compose up
 
 [components]: doc/diagrams.drawio.png
 
+### iOS PWA
+
+Homie can be used as a PWA in iOS. This means that you can add it to your home screen
+as an app. I implemented this following these tutorials:
+
+- https://superpwa.com/doc/test-pwa-ios-devices/
+- https://firt.dev/ios-14.5/#progressive-web-apps-on-ios-14.5
+
+
+
