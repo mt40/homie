@@ -11,9 +11,8 @@
 
 <!-- fonts -->
 <link rel="preconnect" href="https://fonts.gstatic.com">
-<link
-  href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;1,500&family=Lexend:wght@400;700&display=swap"
-  rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
 <!-- bootstrap 5 -->
 <meta charset="utf-8">
@@ -23,7 +22,7 @@
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
 
-<!-- font awesome -->
+<!-- bootstrap icon -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
 <!-- chart.js -->
@@ -47,7 +46,9 @@
 <!-- PWA -->
 <link rel="manifest" href="{% static 'admin_site/homie.webmanifest' %}">
 <link rel="apple-touch-icon" href="{% static 'admin_site/images/apple-touch-icon.png' %}">
-<meta name="apple-mobile-web-app-status-bar-style" content="light-content">
+{#status bar will be black text on white bg in light mode#}
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+{#add service worker script, ios requires this#}
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {

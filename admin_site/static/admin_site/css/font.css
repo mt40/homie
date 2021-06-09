@@ -10,7 +10,7 @@
 }
 
 /*index page title*/
-#branding h1, #branding h1 a:link, #branding h1 a:visited {
+#branding h1, #branding h1 a:link, #branding h1 a:visited, .site_name {
     font-family: 'Crimson Pro', serif;
     font-weight: bold;
 }
@@ -37,7 +37,7 @@ html {
     font-size: 18px;
 }
 
-.form-row, .form-row input[type=text], li, dt, dd {
+.form-row, .form-row input[type=text], li, dt, dd, .form-row textarea, .form-row select {
     font-size: 1rem !important;
 }
 
