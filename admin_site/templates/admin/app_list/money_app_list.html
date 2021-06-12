@@ -9,7 +9,7 @@
 
 <hr/>
 
-{% url '...' as expense_report_url %}
+{% url 'homie_admin:expense_report' as expense_report_url %}
 {% include 'admin/app_list/app_list_entry.html' with title="Expense Report" url=expense_report_url %}
 
 <hr/>

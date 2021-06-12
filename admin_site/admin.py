@@ -1,7 +1,5 @@
-from functools import reduce
 from typing import List, Tuple
 
-from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry
@@ -14,7 +12,9 @@ from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from common import datetime_util, ml_util
 from money import models as money_models
+from money.apps import MoneyConfig
 from money.models import Expense, ExpenseGroup, Budget, Income
+from money.views.expense_report import ExpenseReportView
 from portfolio import models as portfolio_models, finance_util, views as portfolio_views
 from portfolio.apps import PortfolioConfig
 
@@ -50,6 +50,11 @@ class HomieAdminSite(admin.AdminSite):
                 ),
                 name="calculator_result"
             ),
+            path(
+                f'{MoneyConfig.name}/expense/report',
+                self.admin_view(ExpenseReportView.as_view()),
+                name="expense_report"
+            )
         ]
         return extra_urls + super().get_urls()
 
