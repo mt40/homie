@@ -89,7 +89,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            "admin_site/templates"
+            "admin_site/templates",
+            "admin_site/templates/admin",
         ],
         'APP_DIRS': True,
         'OPTIONS': {
