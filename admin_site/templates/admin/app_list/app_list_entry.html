@@ -1,0 +1,26 @@
+{% comment %}
+An entry in app list page
+
+Args:
+  title str
+  url str url of this entry
+  add_url str if not None, show "Add" button that opens this url
+{% endcomment %}
+
+{% load i18n %}
+
+<div class="d-flex align-items-center border border-gray rounded px-3 my-2 model-btn">
+    <span class="flex-grow-1">
+      <a href="{{ url }}" class="d-block py-2 text-fg">
+        <b>{{ title }}</b> <i class="bi bi-box-arrow-up-right ms-1"></i>
+      </a>
+    </span>
+
+  {% if add_url %}
+    <span class="ps-1">
+      <a href="{{ add_url }}" class="btn btn-primary rounded-pill fs-7 ios-focus-dark">
+        <i class="bi bi-plus-lg"></i> {% translate 'Add' %}
+      </a>
+    </span>
+  {% endif %}
+</div>
