@@ -1,0 +1,15 @@
+{% comment %}
+A tab item.
+
+Args:
+  name str name of this tab item, must be unique
+  is_active bool whether this tab is selected, default is False
+{% endcomment %}
+
+<li class="nav-item" role="presentation">
+  <button class="nav-link {% if is_active %}active{% endif %} rounded-pill" id="pills-{{ name|slugify }}-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-{{ name|slugify }}" type="button" role="tab"
+          aria-controls="pills-{{ name|slugify }}" aria-selected="true">
+    {{ name|capfirst }}
+  </button>
+</li>

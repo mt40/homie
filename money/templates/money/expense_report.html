@@ -1,4 +1,21 @@
 {% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label='money' %}">Money</a>
+    &rsaquo; {{ 'Expense Report'|capfirst }}
+  </div>
+{% endblock %}
+
 {% block content %}
-  hello
+  <ul class="nav nav-pills mb-3" role="tablist">
+    {% include 'money/expense_report/tab_item.html' with name='overview' is_active=True %}
+    {% include 'money/expense_report/tab_item.html' with name='budget' %}
+  </ul>
+  <div class="tab-content">
+    {% include 'money/expense_report/tab_pane.html' with name='overview' content_template='money/expense_report/overview.html' is_active=True %}
+    {% include 'money/expense_report/tab_pane.html' with name='budget' content_template='money/expense_report/budget.html' %}
+  </div>
 {% endblock %}
