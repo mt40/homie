@@ -1,0 +1,8 @@
+.nav-pills .nav-link {
+    background-color: var(--accent-color-gray-light);
+    color: var(--body-fg);
+}
+
+ul > li.nav-item {
+    padding-right: 0.8rem;
+}

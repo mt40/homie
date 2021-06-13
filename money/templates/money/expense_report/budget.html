@@ -1,1 +1,5 @@
-<div>budget</div>
+{% for budget in budgets %}
+  <div class="pb-4">
+    {% include 'admin/budget_limit_status.html' with budget=budget show_label=True %}
+  </div>
+{% endfor %}
