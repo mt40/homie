@@ -1,5 +1,11 @@
-{% for budget in budgets %}
-  <div class="pb-4">
-    {% include 'admin/budget_limit_status.html' with budget=budget show_label=True %}
-  </div>
-{% endfor %}
+<div class="border rounded shadow-sm text-muted text-center p-2 my-4">
+  2021-06-01 to 2021-06-12
+</div>
+
+<div class="my-4">
+  {% for budget in budgets %}
+    <div class="pb-4">
+      {% include 'admin/budget_limit_status.html' with budget=budget show_label=True %}
+    </div>
+  {% endfor %}
+</div>
