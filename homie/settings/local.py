@@ -196,3 +196,7 @@ CACHES = {
         'LOCATION': 'world_end',
     }
 }
+
+FORMAT_MODULE_PATH = [
+    'admin_site.formats',
+]
