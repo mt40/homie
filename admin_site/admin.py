@@ -14,7 +14,7 @@ from common import datetime_util, ml_util
 from money import models as money_models
 from money.apps import MoneyConfig
 from money.models import Expense, ExpenseGroup, Budget, Income
-from money.views.expense_report import ExpenseReportView
+from money.views.expense_report import ExpenseReportView, ExpenseReportDefaultView
 from portfolio import models as portfolio_models, finance_util, views as portfolio_views
 from portfolio.apps import PortfolioConfig
 
@@ -50,10 +50,16 @@ class HomieAdminSite(admin.AdminSite):
                 ),
                 name="calculator_result"
             ),
+            # todo: put dates in url
             path(
-                f'{MoneyConfig.name}/expense/report',
+                f'{MoneyConfig.name}/expense/report/<str:from_date>/<str:to_date>/',
                 self.admin_view(ExpenseReportView.as_view()),
                 name="expense_report"
+            ),
+            path(
+                f'{MoneyConfig.name}/expense/report/',
+                self.admin_view(ExpenseReportDefaultView.as_view()),
+                name="expense_report_default"
             )
         ]
         return extra_urls + super().get_urls()

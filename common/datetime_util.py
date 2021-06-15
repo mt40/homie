@@ -3,6 +3,9 @@ from itertools import takewhile
 from typing import Iterator
 
 
+DATE_FORMAT = "%Y-%m-%d"
+
+
 def today() -> datetime.date:
     return datetime.date.today()
 

@@ -2,10 +2,14 @@ import datetime
 from typing import List, Tuple
 
 import pydantic
-from django.views.generic import TemplateView
+from django import forms
+from django.core.exceptions import ValidationError
+from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView, FormView, RedirectView
 from pydantic import PositiveInt, NonNegativeInt
 
 from common import datetime_util
+from common.datetime_util import DATE_FORMAT
 from money.models import Budget, Expense
 
 
@@ -66,38 +70,102 @@ def _get_expense_info_in(
 
 
 # testme
+def get_expense_context(
+    from_date: datetime.date,
+    to_date: datetime.date,
+    past_months_expense: int = 2
+) -> dict:
+    """
+    Args:
+        from_date: compute expense from this day of the month
+        to_date: compute expense to (inclusive) this day of the month
+        past_months_expense: number of previous months to compute expense
+    """
+
+    this_year = from_date.year
+    this_month = from_date.month
+
+    expenses_by_time_range = _get_expense_info_in(
+        [
+            (
+                from_date, to_date
+            ),
+            *[
+                (
+                    datetime_util.same_date_in(this_year, this_month - month, from_date),
+                    datetime_util.same_date_in(this_year, this_month - month, to_date)
+                )
+                for month in range(0, past_months_expense)
+            ],
+        ],
+    )
+    past_expenses = expenses_by_time_range[1:]
+
+    return {
+        'current_total': expenses_by_time_range[0].value,
+        'current_avg': expenses_by_time_range[0].daily_avg,
+        'past_expense_info': [
+            ex.dict() for ex in past_expenses
+        ],
+        'budgets': Budget.objects.all()
+    }
+
+
+class ExpenseReportForm(forms.Form):
+    from_date = forms.DateField(
+        initial=datetime_util.first_date_current_month(),
+        required=True,
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+    to_date = forms.DateField(
+        initial=datetime_util.today(),
+        required=True,
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+
+    def clean(self):
+        super().clean()
+
+        from_date = self.cleaned_data['from_date']
+        to_date = self.cleaned_data['to_date']
+        if from_date > to_date:
+            raise ValidationError("from_date must not be later than to_date")
+
+
 class ExpenseReportView(TemplateView):
     template_name = "money/expense_report/index.html"
 
     def get_context_data(self, **kwargs):
-        today = datetime_util.today()
-        this_year = today.year
-        this_month = today.month
+        form = ExpenseReportForm({
+            'from_date': kwargs['from_date'],
+            'to_date': kwargs['to_date'],
+        })
 
-        expenses_by_time_range = _get_expense_info_in(
-            [
-                (
-                    datetime_util.first_date_of(this_year, this_month),
-                    datetime_util.today(),
-                ),
-                (
-                    datetime_util.first_date_of(this_year, this_month - 1),
-                    datetime_util.same_date_in(this_year, this_month - 1, today)
-                ),
-                (
-                    datetime_util.first_date_of(this_year, this_month - 2),
-                    datetime_util.same_date_in(this_year, this_month - 2, today)
-                ),
-            ],
-        )
-        past_expenses = expenses_by_time_range[1:]
+        if form.is_valid():
+            from_date = form.cleaned_data['from_date']
+            to_date = form.cleaned_data['to_date']
+
+            if from_date.month == to_date.month:
+                extra_context = get_expense_context(from_date, to_date)
+            else:
+                extra_context = get_expense_context(
+                    from_date,
+                    to_date,
+                    past_months_expense=0,
+                )
+        else:
+            extra_context = {}
 
         return {
             **super().get_context_data(**kwargs),
-            'current_total': expenses_by_time_range[0].value,
-            'current_avg': expenses_by_time_range[0].daily_avg,
-            'past_expense_info': [
-                ex.dict() for ex in past_expenses
-            ],
-            'budgets': Budget.objects.all()
+            'form': form,
+            **extra_context,
         }
+
+
+class ExpenseReportDefaultView(RedirectView):
+    permanent = True
+    url = reverse_lazy("homie_admin:expense_report", kwargs={
+        'from_date': datetime_util.first_date_current_month().strftime(DATE_FORMAT),
+        'to_date': datetime_util.today().strftime(DATE_FORMAT),
+    })
