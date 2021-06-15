@@ -132,10 +132,12 @@ class ExpenseReportForm(forms.Form):
     def clean(self):
         super().clean()
 
-        from_date = self.cleaned_data['from_date']
-        to_date = self.cleaned_data['to_date']
-        if from_date > to_date:
-            raise ValidationError("from_date must not be later than to_date")
+        from_date = self.cleaned_data.get('from_date')
+        to_date = self.cleaned_data.get('to_date')
+
+        if from_date and to_date:
+            if from_date > to_date:
+                raise ValidationError("from_date must not be later than to_date")
 
 
 class ExpenseReportView(TemplateView):
