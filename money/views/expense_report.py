@@ -115,12 +115,18 @@ class ExpenseReportForm(forms.Form):
     from_date = forms.DateField(
         initial=datetime_util.first_date_current_month(),
         required=True,
-        widget=forms.DateInput(attrs={'type': 'date'}),
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control',
+        }),
     )
     to_date = forms.DateField(
         initial=datetime_util.today(),
         required=True,
-        widget=forms.DateInput(attrs={'type': 'date'}),
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control',
+        }),
     )
 
     def clean(self):

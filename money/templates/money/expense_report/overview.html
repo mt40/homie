@@ -3,21 +3,17 @@
 <div class="border rounded shadow-sm text-muted text-center p-2 my-4">
   <form>
     {{ form.non_field_errors }}
-    {{ form.subject.errors }}
-    {{ form.message.errors }}
+    {{ form.from_date.errors }}
+    {{ form.to_date.errors }}
     <div class="row align-items-center">
-      <div class="col">
-        <div class="fieldWrapper">
+      <div class="col-sm">
           {{ form.from_date }}
-        </div>
       </div>
 
-      <div class="col-auto">to</div>
+      <div class="col-sm-auto">to</div>
 
-      <div class="col">
-        <div class="fieldWrapper">
+      <div class="col-sm">
           {{ form.to_date }}
-        </div>
       </div>
     </div>
   </form>
