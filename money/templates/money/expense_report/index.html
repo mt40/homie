@@ -10,13 +10,17 @@
 {% endblock %}
 
 {% block content %}
-  <ul class="nav nav-pills mb-3" role="tablist">
+  <ul class="nav nav-pills mb-3 overflow-scroll flex-nowrap scrollbar-hidden" role="tablist">
     {% include 'money/expense_report/tab_item.html' with name='overview' is_active=True %}
+    {% include 'money/expense_report/tab_item.html' with name='daily' %}
+    {% include 'money/expense_report/tab_item.html' with name='detail' %}
     {% include 'money/expense_report/tab_item.html' with name='budget' %}
   </ul>
   {% include 'money/expense_report/date_range_selector.html' %}
   <div class="tab-content">
     {% include 'money/expense_report/tab_pane.html' with name='overview' content_template='money/expense_report/overview.html' is_active=True %}
+    {% include 'money/expense_report/tab_pane.html' with name='daily' content_template='money/expense_report/budget.html' %}
+    {% include 'money/expense_report/tab_pane.html' with name='detail' content_template='money/expense_report/budget.html' %}
     {% include 'money/expense_report/tab_pane.html' with name='budget' content_template='money/expense_report/budget.html' %}
   </div>
 {% endblock %}

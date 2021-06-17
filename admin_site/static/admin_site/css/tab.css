@@ -6,3 +6,7 @@
 ul > li.nav-item {
     padding-right: 0.8rem;
 }
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}
