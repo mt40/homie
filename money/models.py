@@ -73,7 +73,7 @@ class ExpenseCategory(BaseModel):
     name = models.CharField(max_length=50, unique=True, blank=False)
 
     def __str__(self):
-        return str(self.name)
+        return f"{self.group} - {self.name}"
 
 
 class Expense(BaseModel):
