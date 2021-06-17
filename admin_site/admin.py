@@ -50,7 +50,6 @@ class HomieAdminSite(admin.AdminSite):
                 ),
                 name="calculator_result"
             ),
-            # todo: put dates in url
             path(
                 f'{MoneyConfig.name}/expense/report/<str:from_date>/<str:to_date>/',
                 self.admin_view(ExpenseReportView.as_view()),
