@@ -1,42 +1,5 @@
 {% load humanize %}
 
-<div class="border rounded shadow-sm text-muted text-center p-2 my-4">
-  <form>
-    {{ form.non_field_errors }}
-    {{ form.from_date.errors }}
-    {{ form.to_date.errors }}
-    <div class="row align-items-center">
-      <div class="col-sm">
-        {{ form.from_date }}
-      </div>
-
-      <div class="col-sm-auto">to</div>
-
-      <div class="col-sm">
-        {{ form.to_date }}
-      </div>
-    </div>
-  </form>
-
-  <script>
-    function get_report_for(from_date, to_date) {
-      window.location = "{% url 'homie_admin:expense_report_default' %}" + `${from_date}/${to_date}`;
-    }
-
-    const from_date_input = document.querySelector("input#id_from_date");
-    const to_date_input = document.querySelector("input#id_to_date");
-
-    from_date_input.addEventListener('change', (event) => {
-      get_report_for(event.target.value, to_date_input.value);
-    });
-
-    to_date_input.addEventListener('change', (event) => {
-      get_report_for(from_date_input.value, event.target.value);
-    });
-
-  </script>
-</div>
-
 <div class="text-center my-4">
   <h4>Total Expense</h4>
   <h1 class="display-1 text-fg py-2">{{ current_total|intcomma }}</h1>
