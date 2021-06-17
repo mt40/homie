@@ -14,6 +14,9 @@ from money.models import Budget, Expense
 
 
 class PreviousExpenseInfo(pydantic.BaseModel):
+    from_date: str  # we use str because it's easier to use in template
+    to_date: str
+
     name: str
     value: NonNegativeInt
     # change compared to the first time range
@@ -53,6 +56,8 @@ def _get_expense_info_in(
         )
 
         info = PreviousExpenseInfo(
+            from_date=from_date.strftime(DATE_FORMAT),
+            to_date=to_date.strftime(DATE_FORMAT),
             name=from_date.strftime("%b"),
             value=value,
             value_change_percent=value_change_percent,
@@ -69,7 +74,6 @@ def _get_expense_info_in(
     return rs
 
 
-# testme
 def get_expense_context(
     from_date: datetime.date,
     to_date: datetime.date,
@@ -95,7 +99,7 @@ def get_expense_context(
                     datetime_util.same_date_in(this_year, this_month - month, from_date),
                     datetime_util.same_date_in(this_year, this_month - month, to_date)
                 )
-                for month in range(0, past_months_expense)
+                for month in range(1, past_months_expense + 1)
             ],
         ],
     )

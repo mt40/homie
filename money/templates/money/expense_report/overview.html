@@ -7,13 +7,13 @@
     {{ form.to_date.errors }}
     <div class="row align-items-center">
       <div class="col-sm">
-          {{ form.from_date }}
+        {{ form.from_date }}
       </div>
 
       <div class="col-sm-auto">to</div>
 
       <div class="col-sm">
-          {{ form.to_date }}
+        {{ form.to_date }}
       </div>
     </div>
   </form>
@@ -42,24 +42,9 @@
   <h1 class="display-1 text-fg py-2">{{ current_total|intcomma }}</h1>
 
   {% if past_expense_info %}
-    <div class="bg-gray-light rounded py-3 px-4">
+    <div class="list-group">
       {% for expense in past_expense_info %}
-        <div class="row">
-          <div class="col-auto">{{ expense.name }}</div>
-
-          {% if expense.value_change_percent < 0 %}
-            <div class="col text-primary text-end">
-              {{ expense.value|intword }} ({{ expense.value_change_percent }}%)
-              <i class="bi bi-arrow-down-circle-fill"></i>
-            </div>
-          {% else %}
-            <div class="col text-danger text-end">
-              {{ expense.value|intword }} (+{{ expense.value_change_percent }}%)
-              <i class="bi bi-arrow-up-circle-fill"></i>
-            </div>
-          {% endif %}
-
-        </div>
+        {% include 'money/expense_report/compact_expense_info.html' with expense=expense %}
       {% endfor %}
     </div>
   {% endif %}
@@ -70,23 +55,9 @@
   <h1 class="display-1 text-fg py-2">{{ current_avg|intcomma }}</h1>
 
   {% if past_expense_info %}
-    <div class="bg-gray-light rounded py-3 px-4">
+    <div class="list-group">
       {% for expense in past_expense_info %}
-        <div class="row">
-          <div class="col-auto">{{ expense.name }}</div>
-          {% if expense.daily_avg_change_percent < 0 %}
-            <div class="col text-primary text-end">
-              {{ expense.daily_avg|intword }} ({{ expense.daily_avg_change_percent }}%)
-              <i class="bi bi-arrow-down-circle-fill"></i>
-            </div>
-          {% else %}
-            <div class="col text-danger text-end">
-              {{ expense.daily_avg|intword }} (+{{ expense.daily_avg_change_percent }}%)
-              <i class="bi bi-arrow-up-circle-fill"></i>
-            </div>
-          {% endif %}
-
-        </div>
+        {% include 'money/expense_report/compact_expense_info.html' with expense=expense show_avg=True %}
       {% endfor %}
     </div>
   {% endif %}

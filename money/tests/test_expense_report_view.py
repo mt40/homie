@@ -1,6 +1,7 @@
 import datetime
 from datetime import timedelta
 
+from dateutil.relativedelta import relativedelta
 from django.urls import reverse
 
 from common import datetime_util
@@ -37,11 +38,15 @@ class ExpenseReportViewTests(BaseTestCase):
         expense_this_month = Expense.get_expense_value_in(self.month_start, self.month_end)
         days = (self.month_end - self.month_start).days + 1
         avg_expense = int(expense_this_month / days)
+        one_month_ago = self.month_start - relativedelta(months=1)
+        two_month_ago = self.month_start - relativedelta(months=2)
 
         res = self.client.get(self.this_month_report_url)
 
         self.assertContains(res, expense_this_month)
         self.assertContains(res, avg_expense)
+        self.assertContains(res, one_month_ago.strftime('%b'))
+        self.assertContains(res, two_month_ago.strftime('%b'))
 
     def test_expense_report_budget_context(self):
         budgets = Budget.objects.all()
