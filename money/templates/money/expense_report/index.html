@@ -26,10 +26,10 @@
     {% include 'money/expense_report/date_range_selector.html' %}
   </div>
 
-  <div class="tab-content py-3">
+  <div class="tab-content py-5">
     {% include 'money/expense_report/tab_pane.html' with name='overview' content_template='money/expense_report/overview.html' is_active=True %}
     {% include 'money/expense_report/tab_pane.html' with name='daily' content_template='money/expense_report/budget.html' %}
-    {% include 'money/expense_report/tab_pane.html' with name='detail' content_template='money/expense_report/budget.html' %}
+    {% include 'money/expense_report/tab_pane.html' with name='detail' content_template='money/expense_report/detail.html' %}
     {% include 'money/expense_report/tab_pane.html' with name='budget' content_template='money/expense_report/budget.html' %}
   </div>
 
