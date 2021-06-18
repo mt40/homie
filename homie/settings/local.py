@@ -160,6 +160,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     BASE_DIR / "admin_site/static",
     BASE_DIR / "portfolio/static",
+    BASE_DIR / "money/static",
 )
 
 DEFAULT_ADMIN_USERNAME='root'

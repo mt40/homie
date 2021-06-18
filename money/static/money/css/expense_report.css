@@ -1,0 +1,9 @@
+#expense_report_header_wrapper {
+  margin: -15px;
+  padding: 15px;
+  background-size: cover;
+}
+
+.date_range_selector {
+  background: rgba(255, 255, 255, 0.42);
+}
