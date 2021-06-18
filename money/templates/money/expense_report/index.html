@@ -17,7 +17,7 @@
 
 {% block content %}
   <div id="expense_report_header_wrapper">
-    <ul class="nav nav-pills mb-3 overflow-scroll flex-nowrap scrollbar-hidden" role="tablist">
+    <ul class="nav nav-pills pb-3 overflow-scroll flex-nowrap scrollbar-hidden" role="tablist">
       {% include 'money/expense_report/tab_item.html' with name='overview' is_active=True %}
       {% include 'money/expense_report/tab_item.html' with name='daily' %}
       {% include 'money/expense_report/tab_item.html' with name='detail' %}
