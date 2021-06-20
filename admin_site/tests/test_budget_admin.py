@@ -15,7 +15,7 @@ class BudgetAdminTests(WithFakeData, BaseTestCase):
     def test_get_current_accumulated_expenses(self):
         group = ExpenseGroup.objects.first()
         day1 = datetime_util.first_date_current_month()
-        day1_expense = Expense.get_expense_value_in(day1, day1, group)
+        day1_expense = Expense.get_expense_value_in(day1, day1, group=group)
 
         day2 = day1 + timedelta(days=1)
         Expense.objects.create(
@@ -24,7 +24,7 @@ class BudgetAdminTests(WithFakeData, BaseTestCase):
             value=50,
             pay_date=day2,
         )
-        day2_expense = Expense.get_expense_value_in(day2, day2, group)
+        day2_expense = Expense.get_expense_value_in(day2, day2, group=group)
 
         rs = admin._get_current_accumulated_expenses(group)
         self.assertEqual(day1_expense, rs[0])

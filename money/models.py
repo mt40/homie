@@ -115,13 +115,17 @@ class Expense(BaseModel):
     def get_expense_value_in(
         start_date: datetime.date, 
         end_date: datetime.date,
+        category: ExpenseCategory = None,
         group: ExpenseGroup = None,
     ) -> int:
         expenses = Expense.get_expenses_in(start_date, end_date)
+
+        if category is not None:
+            expenses = expenses.filter(category=category)
         if group is not None:
             expenses = expenses.filter(category__group=group)
 
-        return sum([ex.value for ex in expenses])
+        return sum([ex.value for ex in expenses.only('value')])
 
 
 class Budget(BaseModel):

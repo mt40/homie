@@ -6,8 +6,8 @@ from django.urls import reverse
 
 from common import datetime_util
 from common.datetime_util import DATE_FORMAT
-from common.tests import BaseTestCase
-from money.models import Expense, Budget
+from common.tests import BaseTestCase, WithFakeData
+from money.models import Expense, Budget, ExpenseCategory
 from money.views.expense_report import ExpenseReportForm
 
 _default_expense_report_url = reverse("homie_admin:expense_report_default")
@@ -19,7 +19,7 @@ def _expense_report_url(start: datetime.date, end: datetime.date):
     )
 
 
-class ExpenseReportViewTests(BaseTestCase):
+class ExpenseReportViewTests(WithFakeData, BaseTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.month_start = datetime_util.first_date_current_month()
@@ -83,3 +83,11 @@ class ExpenseReportViewTests(BaseTestCase):
         check('2021-06-15', '2021-06-14')
         check('2021-06', '2021-06-14')
         check('2021-06-31', '2021-07-01')
+
+    def test_expense_filter_url(self):
+        category = ExpenseCategory.objects.first()
+        url = f"/admin/money/expense/?category__id__exact={category.id}"
+
+        res = self.client.get(url)
+
+        self.assertEqual(200, res.status_code)

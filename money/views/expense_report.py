@@ -10,7 +10,7 @@ from pydantic import PositiveInt, NonNegativeInt
 
 from common import datetime_util
 from common.datetime_util import DATE_FORMAT
-from money.models import Budget, Expense, Income
+from money.models import Budget, Expense, Income, ExpenseGroup, ExpenseCategory
 
 
 class PreviousExpenseInfo(pydantic.BaseModel):
@@ -74,6 +74,35 @@ def _get_expense_info_in(
     return rs
 
 
+def _get_group_expense_info(from_date: datetime.date, to_date: datetime.date) -> dict:
+    return {
+        'groups': [
+            {
+                'name': group.name,
+                'expense_value': Expense.get_expense_value_in(
+                    from_date, to_date, group=group
+                ),
+                'categories': [
+                    {
+                        'name': cat.name,
+                        'expense_value': Expense.get_expense_value_in(
+                            from_date, to_date, category=cat
+                        ),
+                        'expenses_url': (
+                            "/admin/money/expense/"
+                            f"?category__id__exact={cat.id}"
+                            f"&pay_date__gte={from_date.strftime(DATE_FORMAT)}"
+                            f"&pay_date__lte={to_date.strftime(DATE_FORMAT)}"
+                        )
+                    }
+                    for cat in ExpenseCategory.objects.filter(group=group)
+                ]
+            }
+            for group in ExpenseGroup.objects.all()
+        ]
+    }
+
+
 def get_expense_context(
     from_date: datetime.date,
     to_date: datetime.date,
@@ -116,7 +145,8 @@ def get_expense_context(
         'past_expense_info': [
             ex.dict() for ex in past_expenses
         ],
-        'budgets': Budget.objects.all()
+        'budgets': Budget.objects.all(),
+        **_get_group_expense_info(from_date, to_date),
     }
 
 
