@@ -53,6 +53,21 @@ class Income(BaseModel):
     def __str__(self):
         return f"{self.category}: {self.value}"
 
+    @staticmethod
+    def get_income_value_in(
+        start_date: datetime.date,
+        end_date: datetime.date,
+        group: IncomeGroup = None,
+    ) -> int:
+        incomes = Income.objects.filter(
+            receive_date__gte=start_date,
+            receive_date__lte=end_date
+        )
+        if group is not None:
+            incomes = incomes.filter(category__group=group)
+
+        return sum([inc.value for inc in incomes.only('value')])
+
 
 class ExpenseGroup(BaseModel):
     class Meta:

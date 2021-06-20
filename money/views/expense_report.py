@@ -10,7 +10,7 @@ from pydantic import PositiveInt, NonNegativeInt
 
 from common import datetime_util
 from common.datetime_util import DATE_FORMAT
-from money.models import Budget, Expense
+from money.models import Budget, Expense, Income
 
 
 class PreviousExpenseInfo(pydantic.BaseModel):
@@ -105,9 +105,14 @@ def get_expense_context(
     )
     past_expenses = expenses_by_time_range[1:]
 
+    current_income = Income.get_income_value_in(from_date, to_date)
+    current_expense = expenses_by_time_range[0].value
+
     return {
-        'current_total': expenses_by_time_range[0].value,
-        'current_avg': expenses_by_time_range[0].daily_avg,
+        'current_income': current_income,
+        'current_expense': current_expense,
+        'current_balance': current_income - current_expense,
+        'current_avg_expense': expenses_by_time_range[0].daily_avg,
         'past_expense_info': [
             ex.dict() for ex in past_expenses
         ],
