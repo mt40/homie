@@ -52,3 +52,12 @@ a.btn.btn-primary {
 ul > li {
   list-style-type: none;
 }
+
+.changelist-form-container {
+  width: 100%;
+}
+
+#changelist-filter {
+  margin: 0 !important;
+  width: 100%;
+}
