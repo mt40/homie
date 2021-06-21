@@ -1,5 +1,9 @@
 {% load i18n %}
 
-{% for model in app.models %}
-  {% include 'admin/app_list/app_list_entry.html' with title=model.name url=model.admin_url add_url=model.add_url %}
-{% endfor %}
+<ul class="list-group my-3 mt-5">
+  {% for model in app.models %}
+    <li class="list-group-item">
+      {% include 'admin/app_list/app_list_entry.html' with title=model.name url=model.admin_url add_url=model.add_url %}
+    </li>
+  {% endfor %}
+</ul>

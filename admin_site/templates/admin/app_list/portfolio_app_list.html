@@ -2,12 +2,12 @@
 
 <p><b>Net worth: {{ net_worth|intword }}</b></p>
 
-<hr/>
-
 {% include 'admin/app_list/custom_app_list.html' %}
 
-<hr/>
-
 <!-- calculator -->
-{% url 'homie_admin:calculator' as calculator_url %}
-{% include 'admin/app_list/app_list_entry.html' with title='Calculator' url=calculator_url %}
+<ul class="list-group my-3">
+  <li class="list-group-item">
+    {% url 'homie_admin:calculator' as calculator_url %}
+    {% include 'admin/app_list/app_list_entry.html' with title='Calculator' url=calculator_url %}
+  </li>
+</ul>
