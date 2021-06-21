@@ -64,8 +64,16 @@ class HomieAdminSite(admin.AdminSite):
         return extra_urls + super().get_urls()
 
     def app_index(self, request, app_label, extra_context=None):
+        from_date = datetime_util.first_date_current_month()
+        to_date = datetime_util.today()
+        income = Income.get_income_value_in(from_date, to_date)
+        expense = Expense.get_expense_value_in(from_date, to_date)
+
         return super().app_index(request, app_label, extra_context={
             'net_worth': finance_util.get_net_worth(),
+            'income_this_month': income,
+            'expense_this_month': expense,
+            'balance_this_month': income - expense,
             'pinned_models': [
                 model_cls._meta.object_name
                 for model_cls in (Budget, Expense, Income)

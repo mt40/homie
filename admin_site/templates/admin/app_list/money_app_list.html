@@ -1,4 +1,26 @@
+{% load humanize %}
 {% load i18n %}
+
+<h1>This month</h1>
+<div class="row">
+  <div class="col">Income</div>
+  <div class="col-auto">{{ income_this_month|intcomma }}</div>
+</div>
+<div class="row">
+  <div class="col">Expense</div>
+  <div class="col-auto">{{ expense_this_month|intcomma }}</div>
+</div>
+<div class="row justify-content-end">
+  <div class="col-6"><hr/></div>
+</div>
+<div class="row">
+  <div class="col">Balance</div>
+  <div class="col-auto {% if balance_this_month >= 0 %}text-primary{% else %}text-danger{% endif %}">
+    {{ balance_this_month|intcomma }}
+  </div>
+</div>
+
+<hr/>
 
 <!-- pinned models -->
 {% for model in app.models %}
