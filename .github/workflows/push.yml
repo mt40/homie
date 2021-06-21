@@ -6,7 +6,6 @@ jobs:
   run_tests:
     runs-on: ubuntu-18.04
     name: Run unittests
-    environment: test
     env:
       DJANGO_SETTINGS_MODULE: homie.settings.local
     steps:
