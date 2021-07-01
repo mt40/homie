@@ -13,6 +13,8 @@
     <script src="{% static 'admin/js/nav_sidebar.js' %}" defer></script>
   {% endif %}
 
+  {% block extrastyle %}{% endblock %}
+
   {% if LANGUAGE_BIDI %}
     <link rel="stylesheet" type="text/css"
           href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
@@ -32,7 +34,7 @@
   <!-- END header from Django -->
 
   {% include 'admin/head_custom.html' %}
-  {% block extrastyle %}{% endblock %}
+  {% block extra_custom_css %}{% endblock %}
 </head>
 
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
