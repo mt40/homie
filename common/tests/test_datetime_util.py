@@ -47,3 +47,35 @@ class DatetimeUtilTests(BaseTestCase):
             end=datetime.date(year=2021, month=5, day=31),
             expect=[datetime.date(year=2021, month=5, day=31)]
         )
+
+    def test_first_date_of(self):
+        self.assertEqual(datetime.date(2021, 2, 1), datetime_util.first_date_of(2021, 2))
+        self.assertEqual(datetime.date(2022, 3, 1), datetime_util.first_date_of(2022, 3))
+        self.assertEqual(datetime.date(2020, 1, 1), datetime_util.first_date_of(2020, 1))
+
+    def test_last_date_of(self):
+        self.assertEqual(datetime.date(2021, 2, 28), datetime_util.last_date_of(2021, 2))
+        self.assertEqual(datetime.date(2020, 2, 29), datetime_util.last_date_of(2020, 2))
+        self.assertEqual(datetime.date(2022, 12, 31), datetime_util.last_date_of(2022, 12))
+
+    def test_same_date_in(self):
+        self.assertEqual(
+            datetime.date(2020, 2, 29),
+            datetime_util.same_date_in(2020, 2, datetime.date(2021, 6, 30))
+        )
+        self.assertEqual(
+            datetime.date(2021, 2, 28),
+            datetime_util.same_date_in(2021, 2, datetime.date(2021, 6, 30))
+        )
+        self.assertEqual(
+            datetime.date(2021, 7, 30),
+            datetime_util.same_date_in(2021, 7, datetime.date(2021, 6, 30))
+        )
+        self.assertEqual(
+            datetime.date(2021, 4, 30),
+            datetime_util.same_date_in(2021, 4, datetime.date(2021, 6, 30))
+        )
+        self.assertEqual(
+            datetime.date(2021, 4, 30),
+            datetime_util.same_date_in(2021, 4, datetime.date(2021, 7, 31))
+        )

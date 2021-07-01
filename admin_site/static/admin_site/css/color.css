@@ -68,3 +68,7 @@ div.breadcrumbs a {
 .text-bg {
   color: var(--body-bg) !important;
 }
+
+.bg-gray-light {
+  background-color: var(--accent-color-gray-light);
+}

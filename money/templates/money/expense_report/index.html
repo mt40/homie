@@ -1,0 +1,67 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'money/css/tab.css' %}">
+  <link rel="stylesheet" href="{% static 'money/css/expense_report.css' %}">
+{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label='money' %}">Money</a>
+    &rsaquo; {{ 'Expense Report'|capfirst }}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div id="expense_report_header_wrapper">
+    <ul class="nav nav-pills pb-3 overflow-scroll flex-nowrap scrollbar-hidden" role="tablist">
+      {% include 'money/expense_report/tab_item.html' with name='overview' is_active=True %}
+      {% include 'money/expense_report/tab_item.html' with name='detail' %}
+      {% include 'money/expense_report/tab_item.html' with name='budget' %}
+    </ul>
+    {% include 'money/expense_report/date_range_selector.html' %}
+  </div>
+
+  <div class="tab-content py-5">
+    {% include 'money/expense_report/tab_pane.html' with name='overview' content_template='money/expense_report/overview.html' is_active=True %}
+    {% include 'money/expense_report/tab_pane.html' with name='detail' content_template='money/expense_report/detail.html' %}
+    {% include 'money/expense_report/tab_pane.html' with name='budget' content_template='money/expense_report/budget.html' %}
+  </div>
+
+  <script>
+    const wrapper = document.querySelector('#expense_report_header_wrapper');
+    // set a default background
+    wrapper.style.backgroundImage = 'url("{% static 'money/images/orange_trees.jpeg' %}")';
+
+    const tabs = document.querySelectorAll('button[data-bs-toggle="pill"]');
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('shown.bs.tab', function (event) {
+        const activeTab = event.target;
+
+        let background = 'unset';
+        switch (activeTab.textContent.trim().toLowerCase()) {
+          case 'overview':
+            background = 'url("{% static 'money/images/orange_trees.jpeg' %}")';
+            break;
+          case 'daily':
+            background = 'url("{% static 'money/images/ducks.jpeg' %}")';
+            break;
+          case 'detail':
+            background = 'url("{% static 'money/images/fishing.jpeg' %}")';
+            break;
+          case 'budget':
+            background = 'url("{% static 'money/images/street.jpeg' %}")';
+            break;
+        }
+
+        wrapper.style.backgroundImage = background;
+      });
+    })
+
+  </script>
+
+{% endblock %}

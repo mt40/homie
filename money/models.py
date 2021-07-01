@@ -53,6 +53,21 @@ class Income(BaseModel):
     def __str__(self):
         return f"{self.category}: {self.value}"
 
+    @staticmethod
+    def get_income_value_in(
+        start_date: datetime.date,
+        end_date: datetime.date,
+        group: IncomeGroup = None,
+    ) -> int:
+        incomes = Income.objects.filter(
+            receive_date__gte=start_date,
+            receive_date__lte=end_date
+        )
+        if group is not None:
+            incomes = incomes.filter(category__group=group)
+
+        return sum([inc.value for inc in incomes.only('value')])
+
 
 class ExpenseGroup(BaseModel):
     class Meta:
@@ -73,7 +88,7 @@ class ExpenseCategory(BaseModel):
     name = models.CharField(max_length=50, unique=True, blank=False)
 
     def __str__(self):
-        return str(self.name)
+        return f"{self.group} - {self.name}"
 
 
 class Expense(BaseModel):
@@ -100,13 +115,17 @@ class Expense(BaseModel):
     def get_expense_value_in(
         start_date: datetime.date, 
         end_date: datetime.date,
+        category: ExpenseCategory = None,
         group: ExpenseGroup = None,
     ) -> int:
         expenses = Expense.get_expenses_in(start_date, end_date)
+
+        if category is not None:
+            expenses = expenses.filter(category=category)
         if group is not None:
             expenses = expenses.filter(category__group=group)
 
-        return sum([ex.value for ex in expenses])
+        return sum([ex.value for ex in expenses.only('value')])
 
 
 class Budget(BaseModel):

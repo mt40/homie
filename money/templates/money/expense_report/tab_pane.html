@@ -1,0 +1,13 @@
+{% comment %}
+A page of a tab.
+
+Args:
+  name str name of the corresponding tab item
+  content_template str path to the template containing the content of this pane
+  is_active bool whether this pane is selected, default is False
+{% endcomment %}
+
+<div class="tab-pane fade show {% if is_active %}active{% endif %}" id="pills-{{ name|slugify }}" role="tabpanel"
+     aria-labelledby="pills-{{ name|slugify }}-tab">
+  {% include content_template %}
+</div>

@@ -3,6 +3,9 @@ from itertools import takewhile
 from typing import Iterator
 
 
+DATE_FORMAT = "%Y-%m-%d"
+
+
 def today() -> datetime.date:
     return datetime.date.today()
 
@@ -37,3 +40,23 @@ def get_date_iterator(
         range(0, 31)
     ):
         yield start_date + datetime.timedelta(days=days)
+
+
+def first_date_of(year: int, month: int) -> datetime.date:
+    return today().replace(year=year, month=month, day=1)
+
+
+def last_date_of(year: int, month: int) -> datetime.date:
+    next_month = (first_date_of(year, month) + datetime.timedelta(days=31))
+    return first_date_of(next_month.year, next_month.month) - datetime.timedelta(days=1)
+
+
+def same_date_in(year: int, month: int, target: datetime.date) -> datetime.date:
+    """
+    Returns the same date as `target` in the given month.
+    If the given month doesn't have the target day, the last day is selected.
+    """
+    last_date = last_date_of(year, month)
+    if target.day > last_date.day:
+        return last_date
+    return last_date.replace(day=target.day)

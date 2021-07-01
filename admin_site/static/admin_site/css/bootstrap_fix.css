@@ -48,3 +48,16 @@ a.btn.btn-primary {
 .readonly {
   width: 100%;
 }
+
+ul > li {
+  list-style-type: none;
+}
+
+.changelist-form-container {
+  width: 100%;
+}
+
+#changelist-filter {
+  margin: 0 !important;
+  width: 100%;
+}
