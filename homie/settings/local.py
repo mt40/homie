@@ -89,7 +89,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            "admin_site/templates"
+            BASE_DIR / "admin_site/templates",
+            BASE_DIR / "admin_site/templates/admin",
+            BASE_DIR / "money/templates",
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -158,6 +160,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     BASE_DIR / "admin_site/static",
     BASE_DIR / "portfolio/static",
+    BASE_DIR / "money/static",
 )
 
 DEFAULT_ADMIN_USERNAME='root'
@@ -194,3 +197,7 @@ CACHES = {
         'LOCATION': 'world_end',
     }
 }
+
+FORMAT_MODULE_PATH = [
+    'admin_site.formats',
+]

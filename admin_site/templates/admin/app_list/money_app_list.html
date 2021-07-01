@@ -1,16 +1,49 @@
+{% load humanize %}
 {% load i18n %}
 
-<!-- pinned models -->
-{% for model in app.models %}
-  {% if model.object_name in pinned_models %}
-    {% include 'admin/app_list/app_list_model.html' %}
-  {% endif %}
-{% endfor %}
+<h1>This month</h1>
+<div class="row">
+  <div class="col">Income</div>
+  <div class="col-auto">{{ income_this_month|intcomma }}</div>
+</div>
+<div class="row">
+  <div class="col">Expense</div>
+  <div class="col-auto">{{ expense_this_month|intcomma }}</div>
+</div>
 
 <hr/>
 
-{% for model in app.models %}
-  {% if model.object_name not in pinned_models %}
-    {% include 'admin/app_list/app_list_model.html' %}
-  {% endif %}
-{% endfor %}
+<div class="row fw-bold">
+  <div class="col">Balance</div>
+  <div class="col-auto {% if balance_this_month >= 0 %}text-primary{% else %}text-danger{% endif %}">
+    {{ balance_this_month|intcomma }}
+  </div>
+</div>
+
+<!-- pinned models -->
+<ul class="list-group my-3 mt-5">
+  {% for model in app.models %}
+    {% if model.object_name in pinned_models %}
+      <li class="list-group-item">
+        {% include 'admin/app_list/app_list_entry.html' with title=model.name url=model.admin_url add_url=model.add_url %}
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+<ul class="list-group my-3">
+  <li class="list-group-item">
+    {% url 'homie_admin:expense_report_default' as expense_report_url %}
+    {% include 'admin/app_list/app_list_entry.html' with title="Expense Report" url=expense_report_url %}
+  </li>
+</ul>
+
+<ul class="list-group my-3">
+  {% for model in app.models %}
+    {% if model.object_name not in pinned_models %}
+      <li class="list-group-item">
+        {% include 'admin/app_list/app_list_entry.html' with title=model.name url=model.admin_url add_url=model.add_url %}
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

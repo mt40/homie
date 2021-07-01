@@ -35,7 +35,7 @@ class ModelTransactionTests(TestCase):
 
     def test_int_date_time_field_queryset(self):
         self.assertTrue(
-            Transaction.objects.get(create_time=self.now),
+            Transaction.objects.get(create_time=self.now, symbol=self.simple_txn.symbol),
             self.simple_txn
         )
 

@@ -1,0 +1,14 @@
+name: Health Check
+
+on:
+  schedule:
+    - cron:  '0 6,12,18 * * *'
+
+jobs:
+  check:
+    runs-on: ubuntu-18.04
+    name: Check
+    environment: live
+    steps:
+      - name: Browse home page
+        run: curl --fail "https://homie.minhthai.me"

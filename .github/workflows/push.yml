@@ -1,0 +1,33 @@
+name: Push
+
+on: [push]
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-18.04
+    name: Run unittests
+    env:
+      DJANGO_SETTINGS_MODULE: homie.settings.local
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+
+      - name: System check
+        shell: bash
+        run: |
+          ls -alh
+          python --version
+          pip --version
+
+      - name: Build
+        run: pip install -r requirements.txt
+
+      - name: Migrate DB
+        run: python manage.py migrate
+
+      - name: Test
+        run: python manage.py test

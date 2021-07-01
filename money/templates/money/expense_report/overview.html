@@ -1,0 +1,42 @@
+{% load humanize %}
+
+<div class="text-center">
+  <div class="pb-5">
+    <h4>Balance</h4>
+    <h1
+      class="display-1 py-2 {% if current_balance >= 0 %}text-fg{% else %}text-danger{% endif %}">
+      {{ current_balance|intcomma }}
+    </h1>
+  </div>
+
+  <div class="pb-5">
+    <h4>Total Income</h4>
+    <h1 class="display-1 text-fg py-2">{{ current_income|intcomma }}</h1>
+  </div>
+
+  <div class="pb-5">
+    <h4>Total Expense</h4>
+    <h1 class="display-1 text-fg py-2">{{ current_expense|intcomma }}</h1>
+
+    {% if past_expense_info %}
+      <div class="list-group">
+        {% for expense in past_expense_info %}
+          {% include 'money/expense_report/compact_expense_info.html' with expense=expense %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="pb-5">
+    <h4>Daily Average</h4>
+    <h1 class="display-1 text-fg py-2">{{ current_avg_expense|intcomma }}</h1>
+
+    {% if past_expense_info %}
+      <div class="list-group">
+        {% for expense in past_expense_info %}
+          {% include 'money/expense_report/compact_expense_info.html' with expense=expense show_avg=True %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>

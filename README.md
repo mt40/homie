@@ -4,6 +4,7 @@
 
   <img src="https://github.com/mt40/homie/actions/workflows/deploy_test.yml/badge.svg?branch=master">
   <img src="https://github.com/mt40/homie/actions/workflows/deploy_live.yml/badge.svg?branch=release">
+  <img src="https://github.com/mt40/homie/actions/workflows/health_check.yml/badge.svg?branch=release">
   <br>
   <a href="https://github.com/mt40/homie/compare/release...master">Request Live Deployment</a>
 

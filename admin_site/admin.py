@@ -1,7 +1,5 @@
-from functools import reduce
 from typing import List, Tuple
 
-from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry
@@ -14,7 +12,9 @@ from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 from common import datetime_util, ml_util
 from money import models as money_models
+from money.apps import MoneyConfig
 from money.models import Expense, ExpenseGroup, Budget, Income
+from money.views.expense_report import ExpenseReportView, ExpenseReportDefaultView
 from portfolio import models as portfolio_models, finance_util, views as portfolio_views
 from portfolio.apps import PortfolioConfig
 
@@ -50,12 +50,30 @@ class HomieAdminSite(admin.AdminSite):
                 ),
                 name="calculator_result"
             ),
+            path(
+                f'{MoneyConfig.name}/expense/report/<str:from_date>/<str:to_date>/',
+                self.admin_view(ExpenseReportView.as_view()),
+                name="expense_report"
+            ),
+            path(
+                f'{MoneyConfig.name}/expense/report/',
+                self.admin_view(ExpenseReportDefaultView.as_view()),
+                name="expense_report_default"
+            )
         ]
         return extra_urls + super().get_urls()
 
     def app_index(self, request, app_label, extra_context=None):
+        from_date = datetime_util.first_date_current_month()
+        to_date = datetime_util.today()
+        income = Income.get_income_value_in(from_date, to_date)
+        expense = Expense.get_expense_value_in(from_date, to_date)
+
         return super().app_index(request, app_label, extra_context={
             'net_worth': finance_util.get_net_worth(),
+            'income_this_month': income,
+            'expense_this_month': expense,
+            'balance_this_month': income - expense,
             'pinned_models': [
                 model_cls._meta.object_name
                 for model_cls in (Budget, Expense, Income)

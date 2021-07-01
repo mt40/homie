@@ -4,6 +4,7 @@ from typing import List
 from django.core.management.base import BaseCommand
 from faker import Faker
 
+from common import datetime_util
 from money.models import Wallet, IncomeGroup, IncomeCategory, Income, ExpenseGroup, \
     ExpenseCategory, \
     Expense, Budget
@@ -114,13 +115,14 @@ class Command(BaseCommand):
         ExpenseCategory.objects.create(group=beauty, name='Product')
 
         for category in ExpenseCategory.objects.all():
-            for i in range(0, 15):
+            for i in range(0, 20):
                 Expense.objects.create(
                     wallet=self.fake.random.choice(wallets),
                     category=category,
                     name=self.fake.sentence(nb_words=5),
                     value=self.fake.pyint(1000, 1000000),
                     pay_date=(
-                        datetime.date.today() - datetime.timedelta(days=self.fake.pyint(0, 5))
+                        datetime_util.today()
+                        - datetime.timedelta(days=self.fake.pyint(0, 90))
                     ),
                 )

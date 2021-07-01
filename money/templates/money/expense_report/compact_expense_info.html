@@ -1,0 +1,35 @@
+{% load humanize %}
+
+{% comment %}
+This should be used within a Bootstrap List Group.
+
+Args:
+  PreviousExpenseInfo expense
+  bool show_avg whether to show average value instead of total value, default is False
+{% endcomment %}
+
+<a class="list-group-item list-group-item-action text-fg" href="{% url 'homie_admin:expense_report' expense.from_date expense.to_date %}">
+  <div class="row">
+    <div class="col-auto">{{ expense.name }}</div>
+
+    {% if expense.value_change_percent < 0 %}
+      <div class="col text-primary text-end">
+        {% if show_avg %}
+          {{ expense.daily_avg|intword }} ({{ expense.daily_avg_change_percent }}%)
+        {% else %}
+          {{ expense.value|intword }} ({{ expense.value_change_percent }}%)
+        {% endif %}
+        <i class="bi bi-arrow-down-circle-fill"></i>
+      </div>
+    {% else %}
+      <div class="col text-danger text-end">
+        {% if show_avg %}
+          {{ expense.daily_avg|intword }} ({{ expense.daily_avg_change_percent }}%)
+        {% else %}
+          {{ expense.value|intword }} ({{ expense.value_change_percent }}%)
+        {% endif %}
+        <i class="bi bi-arrow-up-circle-fill"></i>
+      </div>
+    {% endif %}
+  </div>
+</a>
