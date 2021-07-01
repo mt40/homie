@@ -7,7 +7,7 @@ from django.urls import reverse
 from common import datetime_util
 from common.datetime_util import DATE_FORMAT
 from common.tests import BaseTestCase, WithFakeData
-from money.models import Expense, Budget, ExpenseCategory
+from money.models import Expense, Budget, ExpenseCategory, ExpenseGroup
 from money.views.expense_report import ExpenseReportForm
 
 _default_expense_report_url = reverse("homie_admin:expense_report_default")
@@ -54,14 +54,17 @@ class ExpenseReportViewTests(WithFakeData, BaseTestCase):
         res = self.client.get(self.this_month_report_url)
 
         for budget in budgets:
-            self.assertContains(budget.expense_group.name, res)
-            self.assertContains(budget.current_percent, res)
-
-    def test_expense_report_daily_context(self):
-        ...  # todo
+            self.assertContains(res, budget.expense_group.name)
+            self.assertContains(res, budget.current_percent)
 
     def test_expense_report_category_context(self):
-        ...  # todo
+        res = self.client.get(self.this_month_report_url)
+
+        for group in ExpenseGroup.objects.all():
+            self.assertContains(res, group.name)
+
+        for category in ExpenseCategory.objects.all():
+            self.assertContains(res, category.name)
 
     def test_expense_report_form_validation_ok(self):
         def check(from_date, to_date):

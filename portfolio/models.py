@@ -94,6 +94,10 @@ class Holding(models.Model):
     def total_value(self) -> int:
         if self.symbol == const.DEPOSIT_SYMBOL:
             return self.get_fund()
+
+        if self.latest_price is None:
+            return 0
+
         return self.amount * self.latest_price
 
     def refresh_amount_and_price(self):
