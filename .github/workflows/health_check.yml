@@ -1,4 +1,4 @@
-name: Push
+name: Health Check
 
 on:
   schedule:
